@@ -28,7 +28,7 @@ def get_thresholds():
     plt.show()
 """
 
-def get_one_threshold(samples_normal, p_I):
+def get_one_threshold(samples_normal, p_I, min_per, max_per):
     nms_data = {}
 
     for sample in samples_normal:
@@ -45,7 +45,7 @@ def get_one_threshold(samples_normal, p_I):
     nms_lers = []
     for d in nms_data:
         for per in nms_data[d]:
-            if nms_data[d][per] < 0.4:
+            if nms_data[d][per] < 0.4 and per>min_per and per<max_per:
                 nms_distances.append(d)
                 nms_pers.append(per)
                 nms_lers.append(nms_data[d][per])
