@@ -207,14 +207,14 @@ def load_or_create_stim_circuit(
 if __name__ == '__main__':
 #    biases = [64, 128]
     # distances = [4, 8, 12, 16]
-    biases= [32,64,128,256]
+    biases= [2,4,8,16,24]
     distances = [8, 12, 16,20]
 #    ps = [0.0013,0.0014,0.0015,0.0016]
-    ps = np.linspace(0.0037,0.0057,21)#, dtype='float8
+    ps = np.linspace(0.001,0.003,21)#, dtype='float8
     max_n_shots = 100000
     max_n_errors = 1000
-    main('FloquetColourCode',ps,biases,distances, max_n_shots, max_n_errors)   
-#    main('Honeycomb',ps,biases,distances, max_n_shots, max_n_errors)   
+#    main('FloquetColourCode',ps,biases,distances, max_n_shots, max_n_errors)   
+    main('Honeycomb',ps,biases,distances, max_n_shots, max_n_errors)   
 
     """
     biases= [2,4,8,16]
