@@ -131,7 +131,7 @@ def main(code_name,per,bias,distances, max_n_shots, max_n_errors):
         samples = sinter.collect(
             tasks=tasks,
             hint_num_tasks=len(tasks),
-            num_workers=18,
+            num_workers=10,
             max_shots=max_n_shots,
             max_errors=max_n_errors,
             decoders=['pymatching'],
