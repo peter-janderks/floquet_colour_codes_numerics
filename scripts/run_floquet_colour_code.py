@@ -131,7 +131,7 @@ def main(code_name,per,bias,distances, max_n_shots, max_n_errors):
         samples = sinter.collect(
             tasks=tasks,
             hint_num_tasks=len(tasks),
-            num_workers=10,
+            num_workers=18,
             max_shots=max_n_shots,
             max_errors=max_n_errors,
             decoders=['pymatching'],
@@ -207,17 +207,16 @@ def load_or_create_stim_circuit(
 if __name__ == '__main__':
 #    biases = [64, 128]
     # distances = [4, 8, 12, 16]
-    """
-    biases= [32,64,128]
+    biases= [32,64,128,256]
     distances = [8, 12, 16,20]
 #    ps = [0.0013,0.0014,0.0015,0.0016]
-    ps = np.linspace(0.0027,0.0037,11)#, dtype='float8
+    ps = np.linspace(0.0037,0.0057,21)#, dtype='float8
     max_n_shots = 100000
     max_n_errors = 1000
     main('FloquetColourCode',ps,biases,distances, max_n_shots, max_n_errors)   
 #    main('Honeycomb',ps,biases,distances, max_n_shots, max_n_errors)   
+
     """
-    
     biases= [2,4,8,16]
     distances = [8, 12, 16,20]
     ps = np.linspace(0.003,0.006,30)#, dtype='float8
@@ -225,3 +224,4 @@ if __name__ == '__main__':
     max_n_errors = 1000
     main('FloquetColourCode',ps,biases,distances, max_n_shots, max_n_errors)   
     main('Honeycomb',ps,biases,distances, max_n_shots, max_n_errors)   
+    """
