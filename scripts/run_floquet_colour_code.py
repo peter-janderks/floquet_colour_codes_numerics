@@ -110,7 +110,7 @@ def get_bias_tasks(constructor: Callable[[int], TicTacToeCode],code_name,ps,bias
                         'p': round(p,10),
                         'q': q,
                         'm': m,
-                        'time': datetime.now().strftime('%Y%m%d_%H%M%S')}))
+                        'layers': layers
     return tasks
 
 
@@ -205,23 +205,34 @@ def load_or_create_stim_circuit(
     return stim_circuit
 
 if __name__ == '__main__':
-#    biases = [64, 128]
-    # distances = [4, 8, 12, 16]
-    biases= [2,4,8,16,24]
+    max_n_shots = 1000000
+    max_n_errors = 10000
     distances = [8, 12, 16,20]
-#    ps = [0.0013,0.0014,0.0015,0.0016]
-    ps = np.linspace(0.001,0.003,21)#, dtype='float8
-    max_n_shots = 100000
-    max_n_errors = 1000
-#    main('FloquetColourCode',ps,biases,distances, max_n_shots, max_n_errors)   
+    
+    biases= [1,2,4]
+    ps = np.linspace(0.002,0.004,21)
     main('Honeycomb',ps,biases,distances, max_n_shots, max_n_errors)   
 
-    """
-    biases= [2,4,8,16]
-    distances = [8, 12, 16,20]
-    ps = np.linspace(0.003,0.006,30)#, dtype='float8
-    max_n_shots = 100000
-    max_n_errors = 1000
-    main('FloquetColourCode',ps,biases,distances, max_n_shots, max_n_errors)   
+    biases = [8,16]
+    ps = np.linspace(0.0012,0.0032,21)
     main('Honeycomb',ps,biases,distances, max_n_shots, max_n_errors)   
-    """
+
+    biases= [24,32,48,64]
+    ps = np.linspace(0.001,0.003,21)
+    main('Honeycomb',ps,biases,distances, max_n_shots, max_n_errors)   
+
+    biases= [128,256]
+    ps = np.linspace(0.001,0.002,21)
+    main('Honeycomb',ps,biases,distances, max_n_shots, max_n_errors)   
+
+    ###
+    biases= [1,2,4]
+    ps = np.linspace(0.004,0.0055,16)
+    main('FloquetColourCode',ps,biases,distances, max_n_shots, max_n_errors)   
+
+    biases = [8,16,24,32,48,64,128,256]
+    ps = np.linspace(0.004,0.0052,25)
+    main('FloquetColourCode',ps,biases,distances, max_n_shots, max_n_errors)   
+
+
+
