@@ -110,7 +110,7 @@ def get_bias_tasks(constructor: Callable[[int], TicTacToeCode],code_name,ps,bias
                         'p': round(p,10),
                         'q': q,
                         'm': m,
-                        'layers': layers
+                        'layers': layers}))
     return tasks
 
 
@@ -208,7 +208,7 @@ if __name__ == '__main__':
     max_n_shots = 1000000
     max_n_errors = 10000
     distances = [8, 12, 16,20]
-    
+    """
     biases= [1,2,4]
     ps = np.linspace(0.002,0.004,21)
     main('Honeycomb',ps,biases,distances, max_n_shots, max_n_errors)   
@@ -224,8 +224,9 @@ if __name__ == '__main__':
     biases= [128,256]
     ps = np.linspace(0.001,0.002,21)
     main('Honeycomb',ps,biases,distances, max_n_shots, max_n_errors)   
-
+    """
     ###
+
     biases= [1,2,4]
     ps = np.linspace(0.004,0.0055,16)
     main('FloquetColourCode',ps,biases,distances, max_n_shots, max_n_errors)   
