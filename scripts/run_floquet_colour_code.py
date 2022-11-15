@@ -228,7 +228,7 @@ if __name__ == '__main__':
     ###
     
     biases= [4,8,16,24,32,48,64]
-    ps = np.linspace(0.004,0.005,11)
+    ps = np.linspace(0.003,0.004,11)
     main('FloquetColourCode',ps,biases,distances, max_n_shots, max_n_errors)   
 
     """
