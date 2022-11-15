@@ -226,14 +226,15 @@ if __name__ == '__main__':
     main('Honeycomb',ps,biases,distances, max_n_shots, max_n_errors)   
     """
     ###
-
-    biases= [1,2,4]
-    ps = np.linspace(0.004,0.0055,16)
+    
+    biases= [4,8,16,24,32,48,64]
+    ps = np.linspace(0.004,0.005,11)
     main('FloquetColourCode',ps,biases,distances, max_n_shots, max_n_errors)   
 
+    """
     biases = [8,16,24,32,48,64,128,256]
     ps = np.linspace(0.004,0.0052,25)
     main('FloquetColourCode',ps,biases,distances, max_n_shots, max_n_errors)   
-
+    """
 
 
