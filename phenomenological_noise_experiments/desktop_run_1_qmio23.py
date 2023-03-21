@@ -31,7 +31,8 @@ from main.building_blocks.detectors.Stabilizer import Stabilizer
 from main.utils.enums import State
 from main.utils.utils import output_path
 
-
+from main.codes.tic_tac_toe.gauge_honeycomb_code import GaugeHoneycombCode
+from main.codes.tic_tac_toe.gauge_floquet_colour_code import GaugeFloquetColourCode
 def get_bias_tasks(
     constructor: Callable[[int], TicTacToeCode], code_name, ps, bias, bias_type, distances
 ):
@@ -55,14 +56,15 @@ def get_bias_tasks(
            
             if code_name == "HoneycombCode":
                 layers = 2 * distance
-            elif code_name == "FloquetColourCode":
-                layers = distance
-            elif code_name == "Gauge2HoneycombCode":
+            else:
                 layers = distance
 
             if bias_type == "measurement_vs_data_qubit":
-                if code_name == "Gauge2HoneycombCode":
+                if code_name == "Gauge2HoneycombCode" or "Gauge2FloquetColourCode":
                     code = constructor(distance,2)
+                elif code_name == "Gauge3HoneycombCode" or "Gauge3FloquetColourCode":
+                    code = constructor(distance,3)
+
                 else:
                     code = constructor(distance)
 
@@ -93,8 +95,10 @@ def get_bias_tasks(
                         m = q * bias
                     print(f"p, m, q = {(p, m, q)}")
 
-                    if code_name == "Gauge2HoneycombCode":
+                    if code_name == "Gauge2HoneycombCode" or code_name == "Gauge2FloquetColourCode":
                         code = constructor(distance,2)
+                    elif code_name == "Gauge3HoneycombCode" or code_name == "Gauge3FloquetColourCode":
+                        code = constructor(distance,3)
                     else:
                         code = constructor(distance)
 
@@ -205,13 +209,13 @@ def main(code_name, per, bias, bias_type, distances, max_n_shots, max_n_errors, 
         samples = sinter.collect(
             tasks=tasks,
             hint_num_tasks=len(tasks),
-            num_workers=10,
+            num_workers=8,
             max_shots=max_n_shots,
             max_errors=max_n_errors,
             decoders=decoders,
             custom_decoders={'beliefmatching': BeliefMatchingSinterDecoder()},
             print_progress=True,
-            save_resume_filepath=f'./resume_15_3/data_{bias}.csv',
+            save_resume_filepath=f'./resume_15_3/data_{code_name}.csv',
         )
 
 def load_or_create_stim_circuit_data_qubit_noise(px,py,pz, code, layers):
@@ -321,13 +325,14 @@ def load_or_create_stim_circuit(
 
 
 if __name__ == "__main__":
-    biases = [int(sys.argv[1])]
-    ps = np.linspace(0.003, 0.013, 21)
+    biases = [0,0.25, 0.5, 2, 8, 32, 9999]
+    code =  str(sys.argv[1])
+    ps = np.linspace(0.003, 0.02, 21)
     distances = [4,8,12,16]
-    max_n_shots = 10_000
-    max_n_errors = 100
+    max_n_shots = 100_000
+    max_n_errors = 1000
     main(
-        "Gauge2HoneycombCode",
+        code,
         ps,
         biases,
         "measurement_vs_data_qubit",
