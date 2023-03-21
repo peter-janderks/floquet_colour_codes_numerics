@@ -26,7 +26,6 @@ from main.compiling.noise.models import (
 from main.compiling.syndrome_extraction.extractors.ancilla_per_check.mixed.CxCyCzExtractor import (
     CxCyCzExtractor,
 )
-from beliefmatching import BeliefMatchingSinterDecoder
 from main.building_blocks.detectors.Stabilizer import Stabilizer
 from main.utils.enums import State
 from main.utils.utils import output_path
@@ -198,8 +197,10 @@ def main(code_name, per, bias, bias_type, distances, max_n_shots, max_n_errors, 
     if code_name == "HoneycombCode":
         # Collect the samples (takes a few minutes).
         code_constructor = HoneycombCode
-    elif code_name == "Gauge2HoneycombCode":
+    elif code_name == "Gauge2HoneycombCode" or code_name == "Gauge3HoneycombCode":
         code_constructor = GaugeHoneycombCode 
+    elif code_name == "Gauge2FloquetColourCode" or code_name == "Gauge3FloquetColourCode":
+        code_constructor = GaugeFloquetColourCode
     elif code_name == "FloquetColourCode":
         code_constructor = FloquetColourCode
 
