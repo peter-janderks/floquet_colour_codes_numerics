@@ -210,13 +210,13 @@ def main(code_name, per, bias, bias_type, distances, max_n_shots, max_n_errors, 
         samples = sinter.collect(
             tasks=tasks,
             hint_num_tasks=len(tasks),
-            num_workers=8,
+            num_workers=10,
             max_shots=max_n_shots,
             max_errors=max_n_errors,
             decoders=decoders,
             custom_decoders={'beliefmatching': BeliefMatchingSinterDecoder()},
             print_progress=True,
-            save_resume_filepath=f'./resume_15_3/data_{code_name}.csv',
+            save_resume_filepath=f'./resume_31_7/data_{code_name}.csv',
         )
 
 def load_or_create_stim_circuit_data_qubit_noise(px,py,pz, code, layers):
@@ -330,7 +330,7 @@ if __name__ == "__main__":
     code =  str(sys.argv[1])
     ps = np.linspace(0.003, 0.02, 21)
     distances = [4,8,12,16]
-    max_n_shots = 100_000
+    max_n_shots = 1_000_000
     max_n_errors = 1000
     main(
         code,
