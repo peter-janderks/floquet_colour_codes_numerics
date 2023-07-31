@@ -61,10 +61,10 @@ def get_bias_tasks(
                 layers = distance
 
             if bias_type == "measurement_vs_data_qubit":
-                if code_name == "Gauge2HoneycombCode" or "Gauge2FloquetColourCode":
+                if code_name == "Gauge2HoneycombCode" or code_name == "Gauge2FloquetColourCode":
                     code = constructor(distance, 2)
                     gauge = 2
-                elif code_name == "Gauge3HoneycombCode" or "Gauge3FloquetColourCode":
+                elif code_name == "Gauge3HoneycombCode" or code_name == "Gauge3FloquetColourCode":
                     gauge = 3
                     code = constructor(distance, 3)
 
@@ -224,7 +224,7 @@ def main(code_name, per, bias, bias_type, distances, max_n_shots, max_n_errors, 
             decoders=decoders,
             #            custom_decoders={'beliefmatching': BeliefMatchingSinterDecoder()},
             print_progress=True,
-            save_resume_filepath=f'./resume_31_7_gauge/data_{code_name}.csv',
+            save_resume_filepath=f'./resume_31_7_gauge_bug_fix/data_{code_name}.csv',
         )
 
 
@@ -273,7 +273,7 @@ def load_or_create_stim_circuit(
     #    filepath = '../stim_circuits/'
     #    filepath = output_path() / f"stim_circuits/{hashed}.stim"
     filepath = Path(
-        f"./stim_circuits_31_7/m_{m}_q_{q}_code_{type(code).__name__}_distance_{code.distance}_layers_{layers}_gauge_{gauge}.stim")
+        f"./stim_circuits_31_7_bug_fix/m_{m}_q_{q}_code_{type(code).__name__}_distance_{code.distance}_layers_{layers}_gauge_{gauge}.stim")
     if filepath.is_file():
         stim_circuit = stim.Circuit.from_file(filepath)
     else:
@@ -302,7 +302,7 @@ def load_or_create_stim_circuit(
 if __name__ == "__main__":
     biases = [0, 0.25, 0.5, 2, 8, 32, 9999]
     code = str(sys.argv[1])
-    ps = np.linspace(0.005, 0.025, 21)
+    ps = np.linspace(0.001, 0.031, 31)
     distances = [4, 8, 12, 16]
     max_n_shots = 1_000_000
     max_n_errors = 1000
