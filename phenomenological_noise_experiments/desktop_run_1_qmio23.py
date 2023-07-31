@@ -61,12 +61,14 @@ def get_bias_tasks(
             if bias_type == "measurement_vs_data_qubit":
                 if code_name == "Gauge2HoneycombCode" or "Gauge2FloquetColourCode":
                     code = constructor(distance,2)
+                    gauge=2
                 elif code_name == "Gauge3HoneycombCode" or "Gauge3FloquetColourCode":
+                    gauge=3
                     code = constructor(distance,3)
 
                 else:
                     code = constructor(distance)
-
+                    gauge = 0
                 logical_observables = [code.logical_qubits[1].x]
 
                 data_qubits = code.data_qubits.values()
@@ -107,7 +109,8 @@ def get_bias_tasks(
                         syndrome_extractor,
                         code=code,
                         layers=layers,
-                        )
+                        gauge=gauge
+                    )
 
                     tasks[bias].append(
                     sinter.Task(
@@ -214,9 +217,9 @@ def main(code_name, per, bias, bias_type, distances, max_n_shots, max_n_errors, 
             max_shots=max_n_shots,
             max_errors=max_n_errors,
             decoders=decoders,
-            custom_decoders={'beliefmatching': BeliefMatchingSinterDecoder()},
+#            custom_decoders={'beliefmatching': BeliefMatchingSinterDecoder()},
             print_progress=True,
-            save_resume_filepath=f'./resume_31_7/data_{code_name}.csv',
+            save_resume_filepath=f'./resume_31_7_gauge/data_{code_name}.csv',
         )
 
 def load_or_create_stim_circuit_data_qubit_noise(px,py,pz, code, layers):
@@ -255,13 +258,14 @@ def load_or_create_stim_circuit(
     syndrome_extractor,
     code,
     layers,
+    gauge=0
 ):
     # Save time by saving these circuits locally.
     noise_params = (q, m)
   
     #    filepath = '../stim_circuits/'
     #    filepath = output_path() / f"stim_circuits/{hashed}.stim"
-    filepath = Path(f"./stim_circuits/m_{m}_q_{q}_code_{type(code).__name__}_distance_{code.distance}_layers_{layers}.stim")
+    filepath = Path(f"./stim_circuits_31_7/m_{m}_q_{q}_code_{type(code).__name__}_distance_{code.distance}_layers_{layers}_gauge_{gauge}.stim")
     if filepath.is_file():
         stim_circuit = stim.Circuit.from_file(filepath)
     else:
@@ -284,51 +288,16 @@ def load_or_create_stim_circuit(
         )
 
         stim_circuit.to_file(filepath)
-    return stim_circuit
 
 
-def load_or_create_stim_circuit(
-    m,
-    q,
-    syndrome_extractor,
-    code,
-    layers,
-):
-    # Save time by saving these circuits locally.
-    noise_params = (q, m)
-  
-    #    filepath = '../stim_circuits/'
-    #    filepath = output_path() / f"stim_circuits/{hashed}.stim"
-    filepath = Path(f"./stim_circuits/m_{m}_q_{q}_code_{type(code).__name__}_distance_{code.distance}_layers_{layers}.stim")
-    if filepath.is_file():
-        stim_circuit = stim.Circuit.from_file(filepath)
-    else:
-        noise_model = PhenomenologicalNoise(q, m)
-        compiler = AncillaPerCheckCompiler(noise_model, syndrome_extractor)
-        data_qubits = code.data_qubits.values()
-        final_measurements = [
-                Pauli(qubit, PauliLetter("X")) for qubit in data_qubits
-            ]
-        logical_observables = [code.logical_qubits[1].x]
-        initial_stabilizers = []
-        for check in code.check_schedule[0]:
-            initial_stabilizers.append(Stabilizer([(0,check)],0))
-        stim_circuit = compiler.compile_to_stim(
-            code=code,
-            layers=layers,
-            initial_stabilizers = initial_stabilizers,
-            final_measurements=final_measurements,
-            logical_observables=logical_observables,
-        )
+        return stim_circuit
 
-        stim_circuit.to_file(filepath)
-    return stim_circuit
 
 
 if __name__ == "__main__":
     biases = [0,0.25, 0.5, 2, 8, 32, 9999]
     code =  str(sys.argv[1])
-    ps = np.linspace(0.003, 0.02, 21)
+    ps = np.linspace(0.005, 0.025, 21)
     distances = [4,8,12,16]
     max_n_shots = 1_000_000
     max_n_errors = 1000
