@@ -32,6 +32,8 @@ from main.utils.utils import output_path
 
 from main.codes.tic_tac_toe.gauge_honeycomb_code import GaugeHoneycombCode
 from main.codes.tic_tac_toe.gauge_floquet_colour_code import GaugeFloquetColourCode
+
+
 def get_bias_tasks(
     constructor: Callable[[int], TicTacToeCode], code_name, ps, bias, bias_type, distances
 ):
@@ -52,7 +54,7 @@ def get_bias_tasks(
         print(f"Bias = {bias}")
         for distance in distances:
             print(f"Distance = {distance}")
-           
+
             if code_name == "HoneycombCode":
                 layers = 2 * distance
             else:
@@ -60,11 +62,11 @@ def get_bias_tasks(
 
             if bias_type == "measurement_vs_data_qubit":
                 if code_name == "Gauge2HoneycombCode" or "Gauge2FloquetColourCode":
-                    code = constructor(distance,2)
-                    gauge=2
+                    code = constructor(distance, 2)
+                    gauge = 2
                 elif code_name == "Gauge3HoneycombCode" or "Gauge3FloquetColourCode":
-                    gauge=3
-                    code = constructor(distance,3)
+                    gauge = 3
+                    code = constructor(distance, 3)
 
                 else:
                     code = constructor(distance)
@@ -73,15 +75,15 @@ def get_bias_tasks(
 
                 data_qubits = code.data_qubits.values()
                 final_measurements = [
-                    Pauli(qubit, PauliLetter("X")) for qubit in data_qubits]  
+                    Pauli(qubit, PauliLetter("X")) for qubit in data_qubits]
                 initial_stabilizers = []
                 for check in code.check_schedule[0]:
-                    initial_stabilizers.append(Stabilizer([(0,check)],0))
-                pre_circuit: stim.Circuit = pre_compiler.compile_to_circuit(code,layers=layers, 
-                                                                    initial_stabilizers=initial_stabilizers,
-                                                                    final_measurements=final_measurements,
-                                                                    logical_observables=logical_observables)
-                
+                    initial_stabilizers.append(Stabilizer([(0, check)], 0))
+                pre_circuit: stim.Circuit = pre_compiler.compile_to_circuit(code, layers=layers,
+                                                                            initial_stabilizers=initial_stabilizers,
+                                                                            final_measurements=final_measurements,
+                                                                            logical_observables=logical_observables)
+
                 M = pre_circuit.number_of_instructions(["MZ", "MX", "MY"])
                 Q = pre_circuit.number_of_instructions(
                     ["PAULI_CHANNEL_1"]
@@ -97,9 +99,9 @@ def get_bias_tasks(
                     print(f"p, m, q = {(p, m, q)}")
 
                     if code_name == "Gauge2HoneycombCode" or code_name == "Gauge2FloquetColourCode":
-                        code = constructor(distance,2)
+                        code = constructor(distance, 2)
                     elif code_name == "Gauge3HoneycombCode" or code_name == "Gauge3FloquetColourCode":
-                        code = constructor(distance,3)
+                        code = constructor(distance, 3)
                     else:
                         code = constructor(distance)
 
@@ -113,26 +115,27 @@ def get_bias_tasks(
                     )
 
                     tasks[bias].append(
-                    sinter.Task(
-                        circuit=stim_circuit,                 
-                        detector_error_model=stim_circuit.detector_error_model(decompose_errors=True, approximate_disjoint_errors=True, ignore_decomposition_failures=True),
-                        json_metadata={
-                            "code": code_name,
-                            "distance": distance,
-                            "bias": bias,
-                            "p": round(p, 6),
-                            "q": round(q,6),
-                            "m": round(m,6),
-                            "layers": layers,
-                            "bias_type": bias_type
-                        },
+                        sinter.Task(
+                            circuit=stim_circuit,
+                            detector_error_model=stim_circuit.detector_error_model(
+                                decompose_errors=True, approximate_disjoint_errors=True, ignore_decomposition_failures=True),
+                            json_metadata={
+                                "code": code_name,
+                                "distance": distance,
+                                "bias": bias,
+                                "p": round(p, 6),
+                                "q": round(q, 6),
+                                "m": round(m, 6),
+                                "layers": layers,
+                                "bias_type": bias_type
+                            },
+                        )
                     )
-                    )
-                    
+
             elif bias_type == "depolarizing_vs_dephasing":
                 for p in ps:
                     p_y = p * bias / (1 + bias)
-                    p_x = (p - p_y) /2
+                    p_x = (p - p_y) / 2
                     p_z = p_x
                     q = p_y
                     m = p_x + p_z
@@ -146,15 +149,16 @@ def get_bias_tasks(
 
                     tasks[bias].append(
                         sinter.Task(
-                            circuit=stim_circuit,                 
-                            detector_error_model=stim_circuit.detector_error_model(decompose_errors=True, approximate_disjoint_errors=True, ignore_decomposition_failures=True),
+                            circuit=stim_circuit,
+                            detector_error_model=stim_circuit.detector_error_model(
+                                decompose_errors=True, approximate_disjoint_errors=True, ignore_decomposition_failures=True),
                             json_metadata={
                                 "code": code_name,
                                 "distance": distance,
                                 "bias": bias,
                                 "p": round(p, 6),
-                                "q": round(q,6),
-                                "m": round(m,6),
+                                "q": round(q, 6),
+                                "m": round(m, 6),
                                 "layers": layers,
                                 "bias_type": bias_type
                             },
@@ -164,7 +168,7 @@ def get_bias_tasks(
             elif bias_type == "depolarizing_vs_y":
                 for p in ps:
                     p_y = p * bias / (1 + bias)
-                    p_x = (p - p_y) /2
+                    p_x = (p - p_y) / 2
                     p_z = p_x
                     q = p_z
                     m = p_x + p_y
@@ -178,21 +182,22 @@ def get_bias_tasks(
 
                     tasks[bias].append(
                         sinter.Task(
-                            circuit=stim_circuit,                 
-                            detector_error_model=stim_circuit.detector_error_model(decompose_errors=True, approximate_disjoint_errors=True, ignore_decomposition_failures=True),
+                            circuit=stim_circuit,
+                            detector_error_model=stim_circuit.detector_error_model(
+                                decompose_errors=True, approximate_disjoint_errors=True, ignore_decomposition_failures=True),
                             json_metadata={
                                 "code": code_name,
                                 "distance": distance,
                                 "bias": bias,
                                 "p": round(p, 6),
-                                "q": round(q,6),
-                                "m": round(m,6),
+                                "q": round(q, 6),
+                                "m": round(m, 6),
                                 "layers": layers,
                                 "bias_type": bias_type
                             },
                         )
                     )
-                        
+
     return tasks
 
 
@@ -201,7 +206,7 @@ def main(code_name, per, bias, bias_type, distances, max_n_shots, max_n_errors, 
         # Collect the samples (takes a few minutes).
         code_constructor = HoneycombCode
     elif code_name == "Gauge2HoneycombCode" or code_name == "Gauge3HoneycombCode":
-        code_constructor = GaugeHoneycombCode 
+        code_constructor = GaugeHoneycombCode
     elif code_name == "Gauge2FloquetColourCode" or code_name == "Gauge3FloquetColourCode":
         code_constructor = GaugeFloquetColourCode
     elif code_name == "FloquetColourCode":
@@ -217,33 +222,35 @@ def main(code_name, per, bias, bias_type, distances, max_n_shots, max_n_errors, 
             max_shots=max_n_shots,
             max_errors=max_n_errors,
             decoders=decoders,
-#            custom_decoders={'beliefmatching': BeliefMatchingSinterDecoder()},
+            #            custom_decoders={'beliefmatching': BeliefMatchingSinterDecoder()},
             print_progress=True,
             save_resume_filepath=f'./resume_31_7_gauge/data_{code_name}.csv',
         )
 
-def load_or_create_stim_circuit_data_qubit_noise(px,py,pz, code, layers):
-  
+
+def load_or_create_stim_circuit_data_qubit_noise(px, py, pz, code, layers):
+
     #    filepath = '../stim_circuits/'
     #    filepath = output_path() / f"stim_circuits/{hashed}.stim"
-    filepath = Path(f"./stim_circuits/px_{px}_py_{py}_pz_{pz}_code_{type(code).__name__}_distance_{code.distance}_layers_{layers}.stim")
+    filepath = Path(
+        f"./stim_circuits/px_{px}_py_{py}_pz_{pz}_code_{type(code).__name__}_distance_{code.distance}_layers_{layers}.stim")
     if filepath.is_file():
         stim_circuit = stim.Circuit.from_file(filepath)
     else:
 
-        compiler = AncillaPerCheckCompiler(CodeCapacityNoise(px,py,pz), CxCyCzExtractor())
+        compiler = AncillaPerCheckCompiler(CodeCapacityNoise(px, py, pz), CxCyCzExtractor())
         data_qubits = code.data_qubits.values()
         final_measurements = [
-                Pauli(qubit, PauliLetter("X")) for qubit in data_qubits
-            ]
+            Pauli(qubit, PauliLetter("X")) for qubit in data_qubits
+        ]
         logical_observables = [code.logical_qubits[1].x]
         initial_stabilizers = []
         for check in code.check_schedule[0]:
-            initial_stabilizers.append(Stabilizer([(0,check)],0))
+            initial_stabilizers.append(Stabilizer([(0, check)], 0))
         stim_circuit = compiler.compile_to_stim(
             code=code,
             layers=layers,
-            initial_stabilizers = initial_stabilizers,
+            initial_stabilizers=initial_stabilizers,
             final_measurements=final_measurements,
             logical_observables=logical_observables,
         )
@@ -262,10 +269,11 @@ def load_or_create_stim_circuit(
 ):
     # Save time by saving these circuits locally.
     noise_params = (q, m)
-  
+
     #    filepath = '../stim_circuits/'
     #    filepath = output_path() / f"stim_circuits/{hashed}.stim"
-    filepath = Path(f"./stim_circuits_31_7/m_{m}_q_{q}_code_{type(code).__name__}_distance_{code.distance}_layers_{layers}_gauge_{gauge}.stim")
+    filepath = Path(
+        f"./stim_circuits_31_7/m_{m}_q_{q}_code_{type(code).__name__}_distance_{code.distance}_layers_{layers}_gauge_{gauge}.stim")
     if filepath.is_file():
         stim_circuit = stim.Circuit.from_file(filepath)
     else:
@@ -273,32 +281,29 @@ def load_or_create_stim_circuit(
         compiler = AncillaPerCheckCompiler(noise_model, syndrome_extractor)
         data_qubits = code.data_qubits.values()
         final_measurements = [
-                Pauli(qubit, PauliLetter("X")) for qubit in data_qubits
-            ]
+            Pauli(qubit, PauliLetter("X")) for qubit in data_qubits
+        ]
         logical_observables = [code.logical_qubits[1].x]
         initial_stabilizers = []
         for check in code.check_schedule[0]:
-            initial_stabilizers.append(Stabilizer([(0,check)],0))
+            initial_stabilizers.append(Stabilizer([(0, check)], 0))
         stim_circuit = compiler.compile_to_stim(
             code=code,
             layers=layers,
-            initial_stabilizers = initial_stabilizers,
+            initial_stabilizers=initial_stabilizers,
             final_measurements=final_measurements,
             logical_observables=logical_observables,
         )
 
         stim_circuit.to_file(filepath)
-
-
-        return stim_circuit
-
+    return stim_circuit
 
 
 if __name__ == "__main__":
-    biases = [0,0.25, 0.5, 2, 8, 32, 9999]
-    code =  str(sys.argv[1])
+    biases = [0, 0.25, 0.5, 2, 8, 32, 9999]
+    code = str(sys.argv[1])
     ps = np.linspace(0.005, 0.025, 21)
-    distances = [4,8,12,16]
+    distances = [4, 8, 12, 16]
     max_n_shots = 1_000_000
     max_n_errors = 1000
     main(
@@ -311,4 +316,3 @@ if __name__ == "__main__":
         max_n_errors,
         ["pymatching"],
     )
- 
