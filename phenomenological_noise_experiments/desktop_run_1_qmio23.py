@@ -67,7 +67,9 @@ def get_bias_tasks(
                 elif code_name == "Gauge3HoneycombCode" or code_name == "Gauge3FloquetColourCode":
                     gauge = 3
                     code = constructor(distance, 3)
-    
+                elif code_name == "Gauge4HoneycombCode" or code_name == "Gauge4FloquetColourCode":
+                    gauge = 4
+                    code = constructor(distance, 4)
                 else:
                     code = constructor(distance)
                     gauge = 0
@@ -321,7 +323,7 @@ if __name__ == "__main__":
     biases = [32]
     code = 'Gauge3HoneycombCode'
     ps = np.linspace(0.003, 0.01, 16)
-    distances = [4,8, 12, 16]
+    distances = [4, 8, 12, 16]
     max_n_shots = 1_000_000
     max_n_errors = 1000
     main(
@@ -335,10 +337,10 @@ if __name__ == "__main__":
         ["pymatching"],
     )
 
-    biases = [0,0.25,0.5,2,8,32,9999]
+    biases = [0, 0.25, 0.5, 2, 8, 32, 9999]
     code = 'Gauge4HoneycombCode'
     ps = np.linspace(0.001, 0.01, 11)
-    distances = [4,8, 12, 16]
+    distances = [4, 8, 12, 16]
     max_n_shots = 1_000_000
     max_n_errors = 1000
     main(
@@ -352,10 +354,10 @@ if __name__ == "__main__":
         ["pymatching"],
     )
 
-    biases = [0,0.25,0.5,2]
+    biases = [0, 0.25, 0.5, 2]
     code = 'Gauge4FloquetColourCode'
-    ps = np.linspace(0.001, 0.005, 10)
-    distances = [4,8, 12, 16]
+    ps = np.linspace(0.001, 0.005, 11)
+    distances = [4, 8, 12, 16]
     max_n_shots = 1_000_000
     max_n_errors = 1000
     main(
@@ -369,10 +371,10 @@ if __name__ == "__main__":
         ["pymatching"],
     )
 
-    biases = [0,0.25,0.5,2,8,32,9999]
+    biases = [8]
     code = 'Gauge4FloquetColourCode'
-    ps = np.linspace(0.003, 0.01, 16)
-    distances = [4,8, 12, 16]
+    ps = np.linspace(0.003, 0.007, 11)
+    distances = [4, 8, 12, 16]
     max_n_shots = 1_000_000
     max_n_errors = 1000
     main(
@@ -385,12 +387,12 @@ if __name__ == "__main__":
         max_n_errors,
         ["pymatching"],
     )
-    
-    biases = [0,0.25,0.5,2,8,32,9999]
+
+    biases = [32]
 
     code = 'Gauge4FloquetColourCode'
-    ps = np.linspace(0.003, 0.01, 16)
-    distances = [4,8, 12, 16]
+    ps = np.linspace(0.01, 0.02, 11)
+    distances = [4, 8, 12, 16]
     max_n_shots = 1_000_000
     max_n_errors = 1000
     main(
@@ -404,4 +406,19 @@ if __name__ == "__main__":
         ["pymatching"],
     )
 
-
+    biases = [9999]
+    code = 'Gauge4FloquetColourCode'
+    ps = np.linspace(0.022, 0.032, 11)
+    distances = [4, 8, 12, 16]
+    max_n_shots = 1_000_000
+    max_n_errors = 1000
+    main(
+        code,
+        ps,
+        biases,
+        "measurement_vs_data_qubit",
+        distances,
+        max_n_shots,
+        max_n_errors,
+        ["pymatching"],
+    )
