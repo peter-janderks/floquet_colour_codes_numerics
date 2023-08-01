@@ -338,6 +338,7 @@ if __name__ == "__main__":
         ["pymatching"],
     )
 
+    print('HEEEEEEEEEEEEEERE')
     biases = [0, 0.25, 0.5, 2, 8, 32, 9999]
     code = 'Gauge4HoneycombCode'
     ps = np.linspace(0.001, 0.01, 11)
