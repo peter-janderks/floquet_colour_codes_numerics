@@ -220,7 +220,7 @@ def main(
             decoders=decoders,
             custom_decoders={"beliefmatching": BeliefMatchingSinterDecoder()},
             print_progress=True,
-            save_resume_filepath=f"./resume_15_3/data_qmio01.csv",
+            save_resume_filepath=f"./resume_31_7_bm/data_qmio01.csv",
         )
 
         """
@@ -257,7 +257,7 @@ def load_or_create_stim_circuit_data_qubit_noise(px, py, pz, code, layers):
     #    filepath = '../stim_circuits/'
     #    filepath = output_path() / f"stim_circuits/{hashed}.stim"
     filepath = Path(
-        f"./stim_circuits/px_{px}_py_{py}_pz_{pz}_code_{type(code).__name__}_distance_{code.distance}_layers_{layers}.stim"
+        f"./stim_circuits_31_7_bm/px_{px}_py_{py}_pz_{pz}_code_{type(code).__name__}_distance_{code.distance}_layers_{layers}.stim"
     )
     if filepath.is_file():
         stim_circuit = stim.Circuit.from_file(filepath)
@@ -297,7 +297,7 @@ def load_or_create_stim_circuit(
     #    filepath = '../stim_circuits/'
     #    filepath = output_path() / f"stim_circuits/{hashed}.stim"
     filepath = Path(
-        f"./stim_circuits_qmio01/m_{m}_q_{q}_code_{type(code).__name__}_distance_{code.distance}_layers_{layers}.stim"
+        f"./stim_circuits_31_7_bm/m_{m}_q_{q}_code_{type(code).__name__}_distance_{code.distance}_layers_{layers}.stim"
     )
     if filepath.is_file():
         stim_circuit = stim.Circuit.from_file(filepath)
@@ -323,11 +323,11 @@ def load_or_create_stim_circuit(
 
 
 if __name__ == "__main__":
-    ps = np.linspace(0.001, 0.02, 21)
+    ps = np.linspace(0.001, 0.015, 21)
 
-    biases = [0,0.25, 0.5, 2, 8, 32, 9999]
-    distances = [4,8,12, 16]
-    max_n_shots = 10_000
+    biases = [0, 0.25, 0.5, 2, 8, 32, 9999]
+    distances = [4, 8, 12, 16]
+    max_n_shots = 100_000
     max_n_errors = 100
     main(
         "FloquetColourCode",
@@ -339,6 +339,9 @@ if __name__ == "__main__":
         max_n_errors,
         ["beliefmatching"],
     )
+    biases = [0, 0.25, 0.5, 2, 8]
+    ps = np.linspace(0.008, 0.018, 21)
+
     main(
         "HoneycombCode",
         ps,
@@ -350,6 +353,22 @@ if __name__ == "__main__":
         ["beliefmatching"],
     )
 
+    biases = [32, 9999]
+    ps = np.linspace(0.015, 0.025, 21)
+
+    main(
+        "HoneycombCode",
+        ps,
+        biases,
+        "depolarizing_vs_dephasing",
+        distances,
+        max_n_shots,
+        max_n_errors,
+        ["beliefmatching"],
+    )
+    biases = [0, 0.25]
+    ps = np.linspace(0.008, 0.018, 21)
+
     main(
         "FloquetColourCode",
         ps,
@@ -359,7 +378,27 @@ if __name__ == "__main__":
         max_n_shots,
         max_n_errors,
         ["beliefmatching"],
+
     )
+
+    biases = [0.5, 2, 8, 32, 9999]
+    ps = np.linspace(0.005, 0.013, 14)
+
+    main(
+        "FloquetColourCode",
+        ps,
+        biases,
+        "depolarizing_vs_y",
+        distances,
+        max_n_shots,
+        max_n_errors,
+        ["beliefmatching"],
+
+    )
+
+    biases = [0, 0.25, 0.5, 2]
+    ps = np.linspace(0.006, 0.014, 14)
+
     main(
         "HoneycombCode",
         ps,
@@ -371,4 +410,15 @@ if __name__ == "__main__":
         ["beliefmatching"],
     )
 
-    
+    biases = [8, 32, 9999]
+    ps = np.linspace(0.012, 0.02, 14)
+    main(
+        "HoneycombCode",
+        ps,
+        biases,
+        "depolarizing_vs_y",
+        distances,
+        max_n_shots,
+        max_n_errors,
+        ["beliefmatching"],
+    )
