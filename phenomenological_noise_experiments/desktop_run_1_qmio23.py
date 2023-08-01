@@ -207,10 +207,11 @@ def main(code_name, per, bias, bias_type, distances, max_n_shots, max_n_errors, 
     if code_name == "HoneycombCode":
         # Collect the samples (takes a few minutes).
         code_constructor = HoneycombCode
-    elif code_name == "Gauge2HoneycombCode" or code_name == "Gauge3HoneycombCode":
+    elif code_name == "Gauge2HoneycombCode" or code_name == "Gauge3HoneycombCode" or code_name == "Gauge4HoneycombCode":
         code_constructor = GaugeHoneycombCode
-    elif code_name == "Gauge2FloquetColourCode" or code_name == "Gauge3FloquetColourCode":
+    elif code_name == "Gauge2FloquetColourCode" or code_name == "Gauge3FloquetColourCode" or code_name == "Gauge4FloquetColourCode":
         code_constructor = GaugeFloquetColourCode
+
     elif code_name == "FloquetColourCode":
         code_constructor = FloquetColourCode
 
