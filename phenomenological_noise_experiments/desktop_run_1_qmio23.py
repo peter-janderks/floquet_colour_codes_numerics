@@ -143,8 +143,8 @@ def get_bias_tasks(
                     m = p_x + p_z
                     stim_circuit = load_or_create_stim_circuit_data_qubit_noise(
                         p_x,
-                        p_y,
                         p_z,
+                        p_y,
                         code=constructor(distance),
                         layers=layers,
                     )
@@ -227,7 +227,7 @@ def main(code_name, per, bias, bias_type, distances, max_n_shots, max_n_errors, 
             decoders=decoders,
             #            custom_decoders={'beliefmatching': BeliefMatchingSinterDecoder()},
             print_progress=True,
-            save_resume_filepath=f'./resume_31_7_gauge_bug_fix/data_{code_name}.csv',
+            save_resume_filepath=f'./resume_31_7_gauge_dephasing/data_{code_name}.csv',
         )
 
 
@@ -236,7 +236,7 @@ def load_or_create_stim_circuit_data_qubit_noise(px, py, pz, code, layers):
     #    filepath = '../stim_circuits/'
     #    filepath = output_path() / f"stim_circuits/{hashed}.stim"
     filepath = Path(
-        f"./stim_circuits/px_{px}_py_{py}_pz_{pz}_code_{type(code).__name__}_distance_{code.distance}_layers_{layers}.stim")
+        f"./stim_circuits_dephasing/px_{px}_py_{py}_pz_{pz}_code_{type(code).__name__}_distance_{code.distance}_layers_{layers}.stim")
     if filepath.is_file():
         stim_circuit = stim.Circuit.from_file(filepath)
     else:
@@ -303,124 +303,88 @@ def load_or_create_stim_circuit(
 
 
 if __name__ == "__main__":
-    """
-    biases = [8]
-    code = 'Gauge3FloquetColourCode'
-    ps = np.linspace(0.003, 0.01, 8)
-    distances = [4,8, 12, 16]
-    max_n_shots = 1_000_000
-    max_n_errors = 1000
-    main(
-        code,
-        ps,
-        biases,
-        "measurement_vs_data_qubit",
-        distances,
-        max_n_shots,
-        max_n_errors,
-        ["pymatching"],
-    )
-    """
-    biases = [32]
-    code = 'Gauge3HoneycombCode'
-    ps = np.linspace(0.003, 0.01, 16)
-    distances = [4, 8, 12, 16]
-    max_n_shots = 1_000_000
-    max_n_errors = 1000
-    main(
-        code,
-        ps,
-        biases,
-        "measurement_vs_data_qubit",
-        distances,
-        max_n_shots,
-        max_n_errors,
-        ["pymatching"],
-    )
 
-    print('HEEEEEEEEEEEEEERE')
     biases = [0, 0.25, 0.5, 2, 8, 32, 9999]
-    code = 'Gauge4HoneycombCode'
-    ps = np.linspace(0.001, 0.01, 11)
+    code = 'FloquetColourCode'
+    ps = np.linspace(0.001, 0.015, 16)
     distances = [4, 8, 12, 16]
-    max_n_shots = 1_000_000
+    max_n_shots = 100_000
     max_n_errors = 1000
     main(
         code,
         ps,
         biases,
-        "measurement_vs_data_qubit",
+        "measurement_vs_dephasing",
         distances,
         max_n_shots,
         max_n_errors,
         ["pymatching"],
     )
 
-    biases = [0, 0.25, 0.5, 2]
-    code = 'Gauge4FloquetColourCode'
-    ps = np.linspace(0.001, 0.005, 11)
+    biases = [0, 0.25, 0.5, 2, 8, 32, 9999]
+    code = 'HoneycombCode'
+    ps = np.linspace(0.001, 0.015, 16)
     distances = [4, 8, 12, 16]
-    max_n_shots = 1_000_000
+    max_n_shots = 100_000
     max_n_errors = 1000
     main(
         code,
         ps,
         biases,
-        "measurement_vs_data_qubit",
+        "measurement_vs_dephasing",
         distances,
         max_n_shots,
         max_n_errors,
         ["pymatching"],
     )
 
-    biases = [8]
-    code = 'Gauge4FloquetColourCode'
-    ps = np.linspace(0.003, 0.007, 11)
+    biases = [0]
+    code = 'FloquetColourCode'
+    ps = np.linspace(0.014, 0.018, 6)
     distances = [4, 8, 12, 16]
-    max_n_shots = 1_000_000
-    max_n_errors = 1000
+    max_n_shots = 100_000
+    max_n_errors = 100
     main(
         code,
         ps,
         biases,
-        "measurement_vs_data_qubit",
+        "measurement_vs_dephasing",
         distances,
         max_n_shots,
         max_n_errors,
-        ["pymatching"],
+        ["beliefmatching"],
     )
 
-    biases = [32]
-
-    code = 'Gauge4FloquetColourCode'
-    ps = np.linspace(0.01, 0.02, 11)
+    biases = [0.25, 0.5]
+    code = 'FloquetColourCode'
+    ps = np.linspace(0.01, 0.014, 5)
     distances = [4, 8, 12, 16]
-    max_n_shots = 1_000_000
-    max_n_errors = 1000
+    max_n_shots = 100_000
+    max_n_errors = 100
     main(
         code,
         ps,
         biases,
-        "measurement_vs_data_qubit",
+        "measurement_vs_dephasing",
         distances,
         max_n_shots,
         max_n_errors,
-        ["pymatching"],
+        ["beliefmatching"],
     )
 
-    biases = [9999]
-    code = 'Gauge4FloquetColourCode'
-    ps = np.linspace(0.022, 0.032, 11)
+    biases = [2, 8, 32, 9999]
+    code = 'FloquetColourCode'
+    ps = np.linspace(0.005, 0.009, 6)
     distances = [4, 8, 12, 16]
-    max_n_shots = 1_000_000
-    max_n_errors = 1000
+    max_n_shots = 100_000
+    max_n_errors = 100
     main(
         code,
         ps,
         biases,
-        "measurement_vs_data_qubit",
+        "measurement_vs_dephasing",
         distances,
         max_n_shots,
         max_n_errors,
-        ["pymatching"],
+        ["beliefmatching"],
     )
