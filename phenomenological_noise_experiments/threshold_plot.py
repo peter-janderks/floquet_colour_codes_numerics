@@ -2,7 +2,7 @@ import sinter
 import matplotlib.pyplot as plt
 import os
 from scipy.optimize import curve_fit
-
+import numpy as np
 
 def get_thresholds():
     normal_thresholds = []
@@ -152,7 +152,7 @@ def calc_threshold(per_data, distance_data, ler_data):
     popt, pcov = curve_fit(
         threshold_fit, (per_data, distance_data), ler_data, maxfev=50000
     )
-    return popt[-1]
+    return popt[-1], np.sqrt(np.diag(pcov))[-1]
 
 
 def threshold_fit(variables, B0, B1, B2, mu, pth):
