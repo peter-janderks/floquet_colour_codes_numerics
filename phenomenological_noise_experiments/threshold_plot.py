@@ -146,9 +146,6 @@ def main():
 
 
 def calc_threshold(per_data, distance_data, ler_data):
-    print(distance_data)
-    print(per_data)
-    print(ler_data)
     popt, pcov = curve_fit(
         threshold_fit, (per_data, distance_data), ler_data, maxfev=50000
     )
