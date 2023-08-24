@@ -28,17 +28,18 @@ def get_thresholds():
     plt.show()
 """
 
-def get_one_threshold(samples_normal, p_I, min_per, max_per, min_dis):
+def get_one_threshold(samples_normal,  p_I, min_per, max_per, min_dis):
     nms_data = {}
 
     for sample in samples_normal:
-        #       print(sample.__dir__())
-        if sample.json_metadata["distance"] not in nms_data:
-            nms_data[sample.json_metadata["distance"]] = {}
-        #        print(sample.errors)
-        nms_data[sample.json_metadata["distance"]][
-            sample.json_metadata["p"]
-        ] = sample.errors / (sample.shots - sample.discards)
+#        if sample.json_metadata['bias'] == bias
+            #       print(sample.__dir__())
+            if sample.json_metadata["distance"] not in nms_data:
+                nms_data[sample.json_metadata["distance"]] = {}
+            #        print(sample.errors)
+            nms_data[sample.json_metadata["distance"]][
+                sample.json_metadata["p"]
+            ] = sample.errors / (sample.shots - sample.discards)
 
     nms_distances = []
     nms_pers = []
