@@ -313,12 +313,12 @@ def load_or_create_stim_circuit(
 
 if __name__ == "__main__":
 
-    codes = ['Gauge4HoneycombCode', 'Gauge5HoneycombCode']
+    codes = ['Gauge2HoneycombCode', 'Gauge3HoneycombCode', 'Gauge4HoneycombCode', 'Gauge5HoneycombCode']
     distances = [4, 8, 12, 16]
-    max_n_shots = 1_000_000
-    max_n_errors = 1000
+    max_n_shots = 100_000
+    max_n_errors = 100
     biases = [0, 0.25, 0.5]
-    ps = np.linspace(0.002, 0.005, 10)
+    ps = np.linspace(0.003, 0.01, 10)
     for code in codes:
         main(
             code,
@@ -328,13 +328,42 @@ if __name__ == "__main__":
             distances,
             max_n_shots,
             max_n_errors,
-            ["pymatching"],
+            ["beliefmatching"],
         )
 
     biases = [2, 8]
-    ps = np.linspace(0.003, 0.008, 10)
+    ps = np.linspace(0.003, 0.013, 10)
 
     for code in codes:
+        main(
+            code,
+            ps,
+            biases,
+            "measurement_vs_data_qubit",
+            distances,
+            max_n_shots,
+            max_n_errors,
+            ["beliefmatching"],
+        )
+
+    biases = [32, 128]
+    ps = np.linspace(0.005, 0.015, 10)
+    for code in codes:
+        main(
+            code,
+            ps,
+            biases,
+            "measurement_vs_data_qubit",
+            distances,
+            max_n_shots,
+            max_n_errors,
+            ["beliefmatching"],
+        )
+
+    biases = [128]
+    ps = np.linspace(0.005, 0.012, 10)
+
+    for code in codes[:2]:
         main(
             code,
             ps,
@@ -346,7 +375,7 @@ if __name__ == "__main__":
             ["pymatching"],
         )
 
-    biases = [32, 128, 10_000]
+    biases = [9999]
     ps = np.linspace(0.007, 0.014, 10)
 
     for code in codes:
@@ -359,4 +388,19 @@ if __name__ == "__main__":
             max_n_shots,
             max_n_errors,
             ["pymatching"],
+        )
+
+    biases = [9999]
+    ps = np.linspace(0.008, 0.016, 10)
+
+    for code in codes:
+        main(
+            code,
+            ps,
+            biases,
+            "measurement_vs_data_qubit",
+            distances,
+            max_n_shots,
+            max_n_errors,
+            ["beliefmatching"],
         )
