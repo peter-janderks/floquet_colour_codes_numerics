@@ -110,6 +110,8 @@ def get_bias_tasks(
                         code = constructor(distance, 3)
                     elif code_name == "Gauge4HoneycombCode" or code_name == "Gauge4FloquetColourCode":
                         code = constructor(distance, 4)
+                    elif code_name == "Gauge5HoneycombCode" or code_name == "Gauge5FloquetColourCode":
+                        code = constructor(distance, 5)
 
                     else:
                         code = constructor(distance)
@@ -214,9 +216,9 @@ def main(code_name, per, bias, bias_type, distances, max_n_shots, max_n_errors, 
     if code_name == "HoneycombCode":
         # Collect the samples (takes a few minutes).
         code_constructor = HoneycombCode
-    elif code_name == "Gauge2HoneycombCode" or code_name == "Gauge3HoneycombCode" or code_name == "Gauge4HoneycombCode":
+    elif code_name == "Gauge2HoneycombCode" or code_name == "Gauge3HoneycombCode" or code_name == "Gauge4HoneycombCode" or code_name == "Gauge5HoneycombCode":
         code_constructor = GaugeHoneycombCode
-    elif code_name == "Gauge2FloquetColourCode" or code_name == "Gauge3FloquetColourCode" or code_name == "Gauge4FloquetColourCode":
+    elif code_name == "Gauge2FloquetColourCode" or code_name == "Gauge3FloquetColourCode" or code_name == "Gauge4FloquetColourCode" or code_name == "Gauge5FloquetColourCode":
         code_constructor = GaugeFloquetColourCode
 
     elif code_name == "FloquetColourCode":
@@ -228,7 +230,7 @@ def main(code_name, per, bias, bias_type, distances, max_n_shots, max_n_errors, 
         samples = sinter.collect(
             tasks=tasks,
             hint_num_tasks=len(tasks),
-            num_workers=8,
+            num_workers=23,
             max_shots=max_n_shots,
             max_errors=max_n_errors,
             decoders=decoders,
