@@ -336,7 +336,7 @@ if __name__ == "__main__":
     biases = [9999]
     ps = np.linspace(0.007, 0.014, 10)
 
-    for code in codes:
+    for code in codes[2:]:
         main(
             code,
             ps,
