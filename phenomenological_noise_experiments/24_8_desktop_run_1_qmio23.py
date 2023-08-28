@@ -230,7 +230,7 @@ def main(code_name, per, bias, bias_type, distances, max_n_shots, max_n_errors, 
         samples = sinter.collect(
             tasks=tasks,
             hint_num_tasks=len(tasks),
-            num_workers=23,
+            num_workers=4,
             max_shots=max_n_shots,
             max_errors=max_n_errors,
             decoders=decoders,
@@ -313,59 +313,16 @@ def load_or_create_stim_circuit(
 
 if __name__ == "__main__":
 
-    codes = ['Gauge2HoneycombCode', 'Gauge3HoneycombCode', 'Gauge4HoneycombCode', 'Gauge5HoneycombCode']
+    codes = ['Gauge2FloquetColourCode', 'Gauge3FloquetColourCode', 'Gauge4FloquetColourCode', 'Gauge5FloquetColourCode']
     distances = [4, 8, 12, 16]
-
-    biases = [128]
-    ps = np.linspace(0.002, 0.0045, 8)
-    max_n_shots = 100_000
-    max_n_errors = 1000
-
-    main(
-        'HoneycombCode',
-        ps,
-        biases,
-        "measurement_vs_data_qubit",
-        distances,
-        max_n_shots,
-        max_n_errors,
-        ["pymatching"],
-    )
-
-    biases = [128]
-    ps = np.linspace(0.002, 0.006, 8)
     max_n_shots = 10_000
     max_n_errors = 100
 
-    main(
-        'HoneycombCode',
-        ps,
-        biases,
-        "measurement_vs_data_qubit",
-        distances,
-        max_n_shots,
-        max_n_errors,
-        ["beliefmatching"],
-    )
-    biases = [2]
-    ps = np.linspace(0.0045, 0.0055, 4)
-    main(
-        codes[-1],
-        ps,
-        biases,
-        "measurement_vs_data_qubit",
-        distances,
-        max_n_shots,
-        max_n_errors,
-        ["beliefmatching"],
-    )
-
-    biases = [8]
-    ps = np.linspace(0.007, 0.0098, 4)
-
-    for code in codes[2:]:
+    biases = [0,0.25]
+    ps = np.linspace(0.001, 0.008, 10)
+    for code_name in codes:
         main(
-            code,
+            code_name,
             ps,
             biases,
             "measurement_vs_data_qubit",
@@ -375,12 +332,12 @@ if __name__ == "__main__":
             ["beliefmatching"],
         )
 
-    biases = [9999]
-    ps = [np.linspace(0.024, 0.0257, 6), np.linspace(0.0245, 0.027, 6)]
-    for index, code in enumerate(codes[2:]):
+    biases = [0.5]  
+    ps = np.linspace(0.002, 0.008, 10)
+    for code_name in codes:
         main(
-            code,
-            ps[index],
+            code_name,
+            ps,
             biases,
             "measurement_vs_data_qubit",
             distances,
@@ -388,3 +345,74 @@ if __name__ == "__main__":
             max_n_errors,
             ["beliefmatching"],
         )
+
+    biases = [2]  
+    ps = np.linspace(0.003, 0.01, 10)
+    for code_name in codes:
+        main(
+            code_name,
+            ps,
+            biases,
+            "measurement_vs_data_qubit",
+            distances,
+            max_n_shots,
+            max_n_errors,
+            ["beliefmatching"],
+        )
+
+    biases = [8]  
+    ps = np.linspace(0.005, 0.02, 15)
+    for code_name in codes:
+        main(
+            code_name,
+            ps,
+            biases,
+            "measurement_vs_data_qubit",
+            distances,
+            max_n_shots,
+            max_n_errors,
+            ["beliefmatching"],
+        )
+
+    biases = [32]
+    ps = np.linspace(0.01, 0.025, 15)
+    for code_name in codes:
+        main(
+            code_name,
+            ps,
+            biases,
+            "measurement_vs_data_qubit",
+            distances,
+            max_n_shots,
+            max_n_errors,
+            ["beliefmatching"],
+        )
+
+    biases = [128]
+    ps = np.linspace(0.015, 0.035, 15)
+    for code_name in codes:
+        main(
+            code_name,
+            ps,
+            biases,
+            "measurement_vs_data_qubit",
+            distances,
+            max_n_shots,
+            max_n_errors,
+            ["beliefmatching"],
+        )
+    
+    biases = [9999]
+    ps = np.linspace(0.02, 0.04, 15)
+    for code_name in codes:
+        main(
+            code_name,
+            ps,
+            biases,
+            "measurement_vs_data_qubit",
+            distances,
+            max_n_shots,
+            max_n_errors,
+            ["beliefmatching"],
+        )
+        
