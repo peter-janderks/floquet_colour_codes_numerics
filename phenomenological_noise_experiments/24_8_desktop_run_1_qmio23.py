@@ -317,7 +317,7 @@ if __name__ == "__main__":
     distances = [4, 8, 12, 16]
 
     biases = [128]
-    ps = np.linspace(0.002, 0.045, 8)
+    ps = np.linspace(0.002, 0.0045, 8)
     max_n_shots = 100_000
     max_n_errors = 1000
 
@@ -377,7 +377,7 @@ if __name__ == "__main__":
 
     biases = [9999]
     ps = [np.linspace(0.024, 0.0257, 6), np.linspace(0.0245, 0.027, 6)]
-    for index, code in enumerate(codes):
+    for index, code in enumerate(codes[2:]):
         main(
             code,
             ps[index],

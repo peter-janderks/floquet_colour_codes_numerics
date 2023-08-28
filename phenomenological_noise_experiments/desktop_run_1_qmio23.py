@@ -7,7 +7,7 @@ from typing import Callable
 import numpy as np
 import stim
 from scipy.optimize import curve_fit
-
+from beliefmatching import BeliefMatchingSinterDecoder
 import sys
 import sinter
 from matplotlib import pyplot as plt
@@ -225,7 +225,7 @@ def main(code_name, per, bias, bias_type, distances, max_n_shots, max_n_errors, 
             max_shots=max_n_shots,
             max_errors=max_n_errors,
             decoders=decoders,
-            #            custom_decoders={'beliefmatching': BeliefMatchingSinterDecoder()},
+            custom_decoders={'beliefmatching': BeliefMatchingSinterDecoder()},
             print_progress=True,
             save_resume_filepath=f'./resume_31_7_extra/data_{code_name}.csv',
         )
@@ -303,10 +303,9 @@ def load_or_create_stim_circuit(
 
 
 if __name__ == "__main__":
-
-    biases = [0]
-    code = 'FloquetColourCode'
-    ps = np.linspace(0.015, 0.018, 6)
+    biases=[32]
+    code = 'Gauge3HoneycombCode'
+    ps = np.linspace(0.006, 0.008, 4)
     distances = [4, 8, 12, 16]
     max_n_shots = 1_000_000
     max_n_errors = 1000
@@ -314,28 +313,17 @@ if __name__ == "__main__":
         code,
         ps,
         biases,
-        "measurement_vs_dephasing",
+        "measurement_vs_data_qubit",
         distances,
         max_n_shots,
         max_n_errors,
         ["pymatching"],
     )
 
-    biases = [2]
-    code = 'HoneycombCode'
-    ps = np.linspace(0.009, 0.013, 5)
-    distances = [4, 8, 12, 16]
-    max_n_shots = 100_000
-    max_n_errors = 100
-    main(
-        code,
-        ps,
-        biases,
-        "measurement_vs_dephasing",
-        distances,
-        max_n_shots,
-        max_n_errors,
-        ["beliefmatching"],
-    )
+
+
+        
+        
+
 
     
