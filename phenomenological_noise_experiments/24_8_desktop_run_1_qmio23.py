@@ -317,41 +317,38 @@ if __name__ == "__main__":
     distances = [4, 8, 12, 16]
 
     biases = [128]
-    ps = np.linspace(0.005, 0.012, 10)
+    ps = np.linspace(0.002, 0.045, 8)
     max_n_shots = 100_000
     max_n_errors = 1000
 
-    for code in codes[:2]:
-        main(
-            code,
-            ps,
-            biases,
-            "measurement_vs_data_qubit",
-            distances,
-            max_n_shots,
-            max_n_errors,
-            ["pymatching"],
-        )
+    main(
+        'HoneycombCode',
+        ps,
+        biases,
+        "measurement_vs_data_qubit",
+        distances,
+        max_n_shots,
+        max_n_errors,
+        ["pymatching"],
+    )
 
-    biases = [9999]
-    ps = np.linspace(0.007, 0.014, 10)
-
-    for code in codes[2:]:
-        main(
-            code,
-            ps,
-            biases,
-            "measurement_vs_data_qubit",
-            distances,
-            max_n_shots,
-            max_n_errors,
-            ["pymatching"],
-        )
-
+    biases = [128]
+    ps = np.linspace(0.002, 0.006, 8)
     max_n_shots = 10_000
     max_n_errors = 100
+
+    main(
+        'HoneycombCode',
+        ps,
+        biases,
+        "measurement_vs_data_qubit",
+        distances,
+        max_n_shots,
+        max_n_errors,
+        ["beliefmatching"],
+    )
     biases = [2]
-    ps = np.linspace(0.0035, 0.0045, 7)
+    ps = np.linspace(0.0045, 0.0055, 4)
     main(
         codes[-1],
         ps,
@@ -364,7 +361,7 @@ if __name__ == "__main__":
     )
 
     biases = [8]
-    ps = np.linspace(0.01, 0.014, 7)
+    ps = np.linspace(0.007, 0.0098, 4)
 
     for code in codes[2:]:
         main(
@@ -378,23 +375,8 @@ if __name__ == "__main__":
             ["beliefmatching"],
         )
 
-    biases = [32, 128]
-    ps = [np.linspace(0.023, 0.033, 10), np.linspace(0.025, 0.035, 10)]
-    for index, code in enumerate(codes[2:]):
-        main(
-            code,
-            ps[index],
-            biases,
-            "measurement_vs_data_qubit",
-            distances,
-            max_n_shots,
-            max_n_errors,
-            ["beliefmatching"],
-        )
-
     biases = [9999]
-    ps = [np.linspace(0.018, 0.028, 10), np.linspace(0.023, 0.033, 10),
-          np.linspace(0.026, 0.036, 10), np.linspace(0.03, 0.04, 10)]
+    ps = [np.linspace(0.024, 0.0257, 6), np.linspace(0.0245, 0.027, 6)]
     for index, code in enumerate(codes):
         main(
             code,
