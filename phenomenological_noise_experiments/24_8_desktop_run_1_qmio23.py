@@ -313,14 +313,63 @@ def load_or_create_stim_circuit(
 
 if __name__ == "__main__":
 
-    codes = ['Gauge2FloquetColourCode', 'Gauge3FloquetColourCode', 'Gauge4FloquetColourCode', 'Gauge5FloquetColourCode']
+    codes = ['FloquetColourCode, Gauge2FloquetColourCode', 'Gauge3FloquetColourCode',
+             'Gauge4FloquetColourCode', 'Gauge5FloquetColourCode']
     distances = [4, 8, 12, 16]
     max_n_shots = 10_000
     max_n_errors = 100
 
-    biases = [0,0.25]
-    ps = np.linspace(0.001, 0.008, 10)
-    for code_name in codes:
+    biases = [0.25]
+    ps = np.linspace(0.0024, 0.0034, 5)
+
+    main(
+        codes[-1],
+        ps,
+        biases,
+        "measurement_vs_data_qubit",
+        distances,
+        max_n_shots,
+        max_n_errors,
+        ["beliefmatching"],
+    )
+
+    biases = [128]
+    ps = np.linspace(0.007, 0.011, 6)
+
+    main(
+        'FloquetColourCode',
+        ps,
+        biases,
+        "measurement_vs_data_qubit",
+        distances,
+        max_n_shots,
+        max_n_errors,
+        ["beliefmatching"],
+    )
+
+    biases = [9999]
+    ps = np.linspace(0.0075, 0.095, 4)
+
+    main(
+        'FloquetColourCode',
+        ps,
+        biases,
+        "measurement_vs_data_qubit",
+        distances,
+        max_n_shots,
+        max_n_errors,
+        ["beliefmatching"],
+    )
+
+    ##############
+
+    biases = [0, 0.25]
+    ps = np.linspace(0.0005, 0.004, 10)
+
+    max_n_shots = 100_000
+    max_n_errors = 1000
+
+    for code_name in codes[3:]:
         main(
             code_name,
             ps,
@@ -329,12 +378,13 @@ if __name__ == "__main__":
             distances,
             max_n_shots,
             max_n_errors,
-            ["beliefmatching"],
+            ["pymatching"],
         )
 
-    biases = [0.5]  
-    ps = np.linspace(0.002, 0.008, 10)
-    for code_name in codes:
+    biases = [0.5]
+    ps = np.linspace(0.001, 0.004, 10)
+
+    for code_name in codes[3:]:
         main(
             code_name,
             ps,
@@ -343,12 +393,12 @@ if __name__ == "__main__":
             distances,
             max_n_shots,
             max_n_errors,
-            ["beliefmatching"],
+            ["pymatching"],
         )
 
-    biases = [2]  
-    ps = np.linspace(0.003, 0.01, 10)
-    for code_name in codes:
+    biases = [2]
+    ps = np.linspace(0.0015, 0.005, 10)
+    for code_name in codes[3:]:
         main(
             code_name,
             ps,
@@ -357,12 +407,12 @@ if __name__ == "__main__":
             distances,
             max_n_shots,
             max_n_errors,
-            ["beliefmatching"],
+            ["pymatching"],
         )
 
-    biases = [8]  
-    ps = np.linspace(0.005, 0.02, 15)
-    for code_name in codes:
+    biases = [8]
+    ps = np.linspace(0.005, 0.01, 10)
+    for code_name in codes[3:]:
         main(
             code_name,
             ps,
@@ -371,12 +421,12 @@ if __name__ == "__main__":
             distances,
             max_n_shots,
             max_n_errors,
-            ["beliefmatching"],
+            ["pymatching"],
         )
 
     biases = [32]
-    ps = np.linspace(0.01, 0.025, 15)
-    for code_name in codes:
+    ps = np.linspace(0.01, 0.017, 15)
+    for code_name in codes[3:]:
         main(
             code_name,
             ps,
@@ -385,34 +435,38 @@ if __name__ == "__main__":
             distances,
             max_n_shots,
             max_n_errors,
-            ["beliefmatching"],
+            ["pymatching"],
         )
 
     biases = [128]
-    ps = np.linspace(0.015, 0.035, 15)
-    for code_name in codes:
+    ps = [np.linspace(0.005, 0.01, 10),
+          np.linspace(0.018, 0.025, 10),
+          np.linspace(0.016, 0.025, 10),
+          np.linspace(0.015, 0.025, 15),
+          np.linspace(0.015, 0.025, 15)]
+    for index, code_name in enumerate(codes):
         main(
             code_name,
-            ps,
+            ps[index],
             biases,
             "measurement_vs_data_qubit",
             distances,
             max_n_shots,
             max_n_errors,
-            ["beliefmatching"],
+            ["pymatching"],
         )
-    
+
     biases = [9999]
-    ps = np.linspace(0.02, 0.04, 15)
-    for code_name in codes:
+    ps = np.linspace(0.02, 0.03, 15),
+
+    for code_name in codes[3:]:
         main(
             code_name,
-            ps,
+            ps[index],
             biases,
             "measurement_vs_data_qubit",
             distances,
             max_n_shots,
             max_n_errors,
-            ["beliefmatching"],
+            ["pymatching"],
         )
-        
