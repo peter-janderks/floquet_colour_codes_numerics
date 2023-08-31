@@ -230,7 +230,7 @@ def main(code_name, per, bias, bias_type, distances, max_n_shots, max_n_errors, 
         samples = sinter.collect(
             tasks=tasks,
             hint_num_tasks=len(tasks),
-            num_workers=4,
+            num_workers=23,
             max_shots=max_n_shots,
             max_errors=max_n_errors,
             decoders=decoders,
