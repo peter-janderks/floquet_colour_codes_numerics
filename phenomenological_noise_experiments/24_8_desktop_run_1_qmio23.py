@@ -236,7 +236,7 @@ def main(code_name, per, bias, bias_type, distances, max_n_shots, max_n_errors, 
             decoders=decoders,
             custom_decoders={'beliefmatching': BeliefMatchingSinterDecoder()},
             print_progress=True,
-            save_resume_filepath=f'./resume_24_8/data_{code_name}.csv',
+            save_resume_filepath=f'./resume_3_9/data_{code_name}.csv',
         )
 
 
@@ -285,7 +285,7 @@ def load_or_create_stim_circuit(
     #    filepath = '../stim_circuits/'
     #    filepath = output_path() / f"stim_circuits/{hashed}.stim"
     filepath = Path(
-        f"./stim_circuits_24_8/m_{m}_q_{q}_code_{type(code).__name__}_distance_{code.distance}_layers_{layers}_gauge_{gauge}.stim")
+        f"./stim_circuits_3_9/m_{m}_q_{q}_code_{type(code).__name__}_distance_{code.distance}_layers_{layers}_gauge_{gauge}.stim")
     if filepath.is_file():
         stim_circuit = stim.Circuit.from_file(filepath)
     else:
@@ -312,18 +312,16 @@ def load_or_create_stim_circuit(
 
 
 if __name__ == "__main__":
-    codes = ['FloquetColourCode', Gauge2FloquetColourCode', 'Gauge3FloquetColourCode',
-             'Gauge4FloquetColourCode', 'Gauge5FloquetColourCode']
     distances = [4, 8, 12, 16]
     max_n_shots = 100_000
     max_n_errors = 1000
-    biases = [8, 32]
-    ps = np.linspace(0.012, 0.03, 10)
-    for code_name in codes[2:]:
+    bias_ps_dict = {(0, 0.25, 0.5): np.linspace(0.003, 0.007, 10), (2,): np.linspace(0.005, 0.01, 10), (8,): np.linsace(
+        0.008, 0.016, 10), (32,): np.linspace(0.014, 0.024, 10), (128,): np.linspace(0.018, 0.025, 10), (9999,): np.linspace(0.02, 0.03, 10)}
+    for biasess, ps in bias_ps_dict.items():
         main(
-            code_name,
+            'Gauge2FloquetColourCode',
             ps,
-            biases,
+            list(biases),
             "measurement_vs_data_qubit",
             distances,
             max_n_shots,
@@ -331,29 +329,13 @@ if __name__ == "__main__":
             ["pymatching"],
         )
 
-    biases = [128]
-    ps = [np.linspace(0.0255, 0.03, 10),
-          np.linspace(0.0255, 0.03, 10),
-          np.linspace(0.0255, 0.03, 10)]
-    for index, code_name in enumerate(codes[2:]):
+    bias_ps_dict = {(0, 0.25, 0.5): np.linspace(0.002, 0.006, 10), (2,): np.linspace(0.004, 0.01, 10), (8,): np.linsace(
+        0.006, 0.016, 10), (32,): np.linspace(0.016, 0.026, 10), (128,): np.linspace(0.022, 0.03, 10), (9999,): np.linspace(0.022, 0.032, 10)}
+    for biasess, ps in bias_ps_dict.items():
         main(
-            code_name,
-            ps[index],
-            biases,
-            "measurement_vs_data_qubit",
-            distances,
-            max_n_shots,
-            max_n_errors,
-            ["pymatching"],
-        )
-
-    biases = [9999]
-    ps = np.linspace(0.023, 0.033, 10)
-    for code_name in codes[3:]:
-        main(
-            code_name,
+            'Gauge3FloquetColourCode',
             ps,
-            biases,
+            list(biases),
             "measurement_vs_data_qubit",
             distances,
             max_n_shots,
