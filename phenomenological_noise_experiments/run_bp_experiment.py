@@ -302,6 +302,7 @@ def main(
                 ),
                 "bposd": BeliefMatchingSinterDecoder(
                     bposd=True,
+                    filename="bp_iters_d8" + code_name + ".csv",
                     metadata={"bias": bias, "per": per, "code_name": code_name},
                 ),
                 "maxsat": MaxSATSinterDecoder("normalized-log"),
@@ -373,22 +374,16 @@ def load_or_create_stim_circuit(m, q, syndrome_extractor, code, layers, gauge=0)
 
 if __name__ == "__main__":
     distances = [8]
-    max_n_shots = 10_000
+    max_n_shots = 100_000
     max_n_errors = 100
 
-    # bias_ps_dict = {(0.5,): np.linspace(0.006, 0.014, 10)}
     pers = [
-        [0.006],
-        [0.007],
-        [0.008],
-        [0.009],
-        [0.01],
-        [0.011],
-        [0.012],
-        [0.013],
-        [0.014],
+        [0.004],
+        [0.005]
     ]
-    for bp_iters in [500,]:
+    for bp_iters in [
+        20,
+    ]:
         for ps in pers:
             main(
                 "FloquetColourCode",
@@ -403,48 +398,12 @@ if __name__ == "__main__":
             )
 
     pers = [
-        #        [0.006],
-        #       [0.007],
-        #      [0.009],
-        [0.008],
-        #        [0.010],
-        #        [0.011],
-        #        [0.012],
-        #        [0.013],
-        #        [0.014],
-        #        [0.015],
-        #        [0.016],
-        #        [0.017],
+        [0.004],
+        [0.005],
     ]
-    for bp_iters in [10, 20, 50, 200]:
-        for ps in pers:
-            main(
-                "HoneycombCode",
-                ps,
-                [9999],
-                "depolarizing_vs_y",
-                distances,
-                max_n_shots,
-                max_n_errors,
-                ["beliefmatching"],
-                bp_iters,
-            )
-
-    pers = [
-                [0.006],
-               [0.007],
-              [0.009],
-        [0.008],
-                [0.010],
-                [0.011],
-                [0.012],
-                [0.013],
-                [0.014],
-                [0.015],
-                [0.016],
-                [0.017],
-    ]
-    for bp_iters in [500,]:
+    for bp_iters in [
+        20,
+    ]:
         for ps in pers:
             main(
                 "HoneycombCode",
