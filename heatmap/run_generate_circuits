@@ -4,7 +4,7 @@ set -e
 
 parallel -q --ungroup ./generate_circuits.py \
     --code_name {1} \
-    --per 0.001 \
+    --per 0.0005 \
     --px 1\
     --py 1\
     --pz {2}\
@@ -13,18 +13,19 @@ parallel -q --ungroup ./generate_circuits.py \
     --gf_1 {5} \
     --gf_2 {6} \
     --gf_3 {7} \
+    --logical_observable {8} \
     ::: "GaugeHoneycombCode" \
     ::: 1 4 8 \
-    ::: 1 4 8\
+    ::: 1 4 8 \
     ::: 4 8 12 \
     ::: 1 2 3\
     ::: 1 2 3\
     ::: 1 2 3\
-
+    ::: "memory_x" "memory_z" \
 
 parallel -q --ungroup ./generate_circuits.py \
     --code_name {1} \
-    --per 0.001 \
+    --per 0.0005 \
     --px 1\
     --py 1\
     --pz {2}\
@@ -32,9 +33,11 @@ parallel -q --ungroup ./generate_circuits.py \
     --distance {4} \
     --gf_1 {5} \
     --gf_2 {6} \
+    --logical_observable {7} \
     ::: "GaugeFloquetColourCode" \
     ::: 1 4 8 \
-    ::: 1 4 8\
+    ::: 1 4 8 \
     ::: 4 8 12 \
-    ::: 1 2 3\
-    ::: 1 2 3\
+    ::: 1 2 3 \
+    ::: 1 2 3 \
+    ::: "memory_x" "memory_z" \

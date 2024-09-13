@@ -24,26 +24,24 @@ from main.codes.tic_tac_toe.TicTacToeCode import TicTacToeCode
 from main.compiling.compilers.AncillaPerCheckCompiler import AncillaPerCheckCompiler
 from main.compiling.noise.models import (
     PhenomenologicalNoise,
-    CircuitLevelNoise,
-    CodeCapacityNoise,
+
 )
 from main.compiling.noise.noises import OneQubitNoise
 from main.compiling.syndrome_extraction.extractors.ancilla_per_check.mixed.CxCyCzExtractor import (
     CxCyCzExtractor,
 )
-from beliefmatching import BeliefMatchingSinterDecoder
 from main.building_blocks.detectors.Stabilizer import Stabilizer
-from main.utils.enums import State
-from main.utils.utils import output_path
 import pathlib
-import sys
 
 # src_path = pathlib.Path(__file__).parent.parent / 'src'
 # assert src_path.exists()
 # sys.path.append(str(src_path))
 
 
-class ConstructCircuit():
+class ConstructCircuits():
+    """
+    Constructs 4 circuits. Two memory experiments and two stability experiments. #TODO: program stability
+    """
 
     def __init__(self,
                  code_name,
@@ -56,7 +54,8 @@ class ConstructCircuit():
                  gf_0,
                  gf_1,
                  gf_2,
-                 out_dir
+                 out_dir,
+                 logical_observable
                  ):
         self.code_name = code_name
         self.distance = distance
@@ -65,7 +64,8 @@ class ConstructCircuit():
         self.gf_0 = gf_0
         self.gf_1 = gf_1
         self.gf_2 = gf_2
-
+        self.logical_observable = logical_observable
+        print(self.logical_observable)
         metadata = {
             "code_name": code_name,
             "per": per,
@@ -77,6 +77,7 @@ class ConstructCircuit():
             "gf_0": gf_0,
             "gf_1": gf_1,
             "gf_2": gf_2,
+            "logical_observable": logical_observable
         }
         meta_str = ','.join(f'{k}={v}' for k, v in metadata.items())
 
@@ -101,34 +102,30 @@ class ConstructCircuit():
             print(distance)
             print('error')
             raise ValueError('Error in constructing circuit')
+        else:
+            with open(circuit_path, 'w') as f:
+                f.write(str(stim_circuit
+                            ))
 
     def get_number_of_rounds_gauge_honeycomb(self):
 
-        if self.gf_0 == self.gf_1 and self.gf_1 == self.gf_2:
-            frequency_of_measurement_errors = 3
-        else:
-            frequencies_sorted = sorted([self.gf_0, self.gf_1, self.gf_2])
-            frequency_of_measurement_errors = 3 + frequencies_sorted[2] - \
-                frequencies_sorted[0] + \
-                frequencies_sorted[2] - frequencies_sorted[1]
+        frequencies_sorted = sorted([self.gf_0, self.gf_1, self.gf_2])
+        frequency_of_measurement_errors = sum(
+            frequencies_sorted)/frequencies_sorted[0]
 
         frequency_of_data_qubit_errors = 2 * \
             (self.gf_0/3+self.gf_1/3+self.gf_2/3)
 
-        if frequency_of_data_qubit_errors > frequency_of_measurement_errors:
-            rounds = math.ceil(frequency_of_data_qubit_errors*self.distance)
-        else:
-            rounds = math.ceil(frequency_of_measurement_errors*self.distance)
-
-        return rounds
+        return (math.ceil(max(frequency_of_measurement_errors,
+                              frequency_of_data_qubit_errors)*self.distance))
 
     def get_number_of_rounds_gauge_floquet_colour_code(self):
-        if self.gf_0 == self.gf_1:
-            frequency_of_data_qubit_errors = 2 * self.gf_0
-        else:
-            frequency_of_data_qubit_errors = 2 + abs(self.gf_1-self.gf_0)
+        frequency_of_data_qubit_errors = self.gf_0 + self.gf_1
 
-        frequency_measurement_errors = 4 + 2 * abs(self.gf_1 - self.gf_0)
+        frequencies_sorted = sorted([self.gf_0, self.gf_1])
+        frequency_measurement_errors = 2*sum(
+            frequencies_sorted)/frequencies_sorted[0]
+
         return max(frequency_of_data_qubit_errors, frequency_measurement_errors) * self.distance
 
     def init_compiler_settings(self):
@@ -148,11 +145,20 @@ class ConstructCircuit():
             self.code = self.constructor(self.distance, [self.gf_0, self.gf_1])
             rounds = self.get_number_of_rounds_gauge_floquet_colour_code()
 
-        logical_observables = [self.code.logical_qubits[1].x]
         initial_stabilizers = []
-
-        for check in self.code.check_schedule[0]:
-            initial_stabilizers.append(Stabilizer([(0, check)], 0))
+        if self.logical_observable == "memory_x":
+            logical_observables = [self.code.logical_qubits[1].x]
+            for check in self.code.check_schedule[0]:
+                initial_stabilizers.append(Stabilizer([(0, check)], 0))
+        elif self.logical_observable == "memory_z":
+            logical_observables = [self.code.logical_qubits[0].z]
+            if self.code_name == "GaugeHoneycombCode":
+                for check in self.code.check_schedule[self.gf_0+self.gf_1]:
+                    initial_stabilizers.append(Stabilizer([(0, check)], 0))
+            elif self.code_name == "GaugeFloquetColourCode":
+                for check in self.code.check_schedule[self.gf_0]:
+                    initial_stabilizers.append(Stabilizer([(0, check)], 0)
+                                               )
 
         self.compiler_settings = {"total_rounds": rounds, "initial_stabilizers": initial_stabilizers,
                                   "observables": logical_observables}
@@ -180,7 +186,6 @@ class ConstructCircuit():
         self.py = py * normalized_per
         self.pz = pz * normalized_per
         self.pm = pm * normalized_per
-        print(self.px, self.py, self.pz, self.pm)
 
     def construct_circuit(self):
         noise_model = PhenomenologicalNoise(
@@ -208,16 +213,19 @@ if __name__ == "__main__":
     parser.add_argument('--gf_1', type=int, nargs='+', default=0)
     parser.add_argument('--gf_2', type=int, nargs='+', default=0)
     parser.add_argument('--gf_3', type=int, nargs='+', default=[0])
+    parser.add_argument('--logical_observable', nargs='+',
+                        type=str, required=True)
     parser.add_argument('--out_dir', type=str, nargs='+',
                         default='out/circuits')
     args = parser.parse_args()
     out_dir = pathlib.Path(args.out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    for (code_name, per, px, py, pz, pm, distance, gf_1, gf_2, gf_3) in itertools.product(args.code_name, args.per, args.px, args.py, args.pz, args.pm, args.distance, args.gf_1, args.gf_2, args.gf_3):
+    for (code_name, per, px, py, pz, pm, distance, gf_1, gf_2, gf_3, logical_observable) in itertools.product(args.code_name, args.per, args.px, args.py, args.pz, args.pm, args.distance, args.gf_1, args.gf_2, args.gf_3, args.logical_observable):
 
-        print(code_name, per, px, py, pz, pm, distance, gf_1, gf_2, gf_3)
-        ConstructCircuit(
+        print(code_name, per, px, py, pz, pm, distance,
+              gf_1, gf_2, gf_3, logical_observable)
+        ConstructCircuits(
             code_name,
             per,
             px,
@@ -228,5 +236,6 @@ if __name__ == "__main__":
             gf_1,
             gf_2,
             gf_3,
-            out_dir
+            out_dir,
+            logical_observable
         )

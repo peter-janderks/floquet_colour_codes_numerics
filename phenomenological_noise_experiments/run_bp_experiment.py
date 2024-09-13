@@ -11,7 +11,6 @@ from scipy.optimize import curve_fit
 import sys
 import sinter
 from matplotlib import pyplot as plt
-from max_sat_decoder import MaxSATSinterDecoder
 from main.building_blocks.pauli import Pauli
 from main.building_blocks.pauli.PauliLetter import PauliLetter
 from main.codes.tic_tac_toe.FloquetColourCode import FloquetColourCode
@@ -30,7 +29,7 @@ from main.building_blocks.detectors.Stabilizer import Stabilizer
 from main.utils.enums import State
 from main.utils.utils import output_path
 from beliefmatching import BeliefMatchingSinterDecoder
-from max_sat_decoder import MaxSATSinterDecoder
+#from max_sat_decoder import MaxSATSinterDecoder
 from main.codes.tic_tac_toe.gauge.GaugeHoneycombCode import GaugeHoneycombCode
 from main.codes.tic_tac_toe.gauge.GaugeFloquetColourCode import GaugeFloquetColourCode
 
@@ -290,25 +289,25 @@ def main(
         samples = sinter.collect(
             tasks=tasks,
             hint_num_tasks=len(tasks),
-            num_workers=10,
+            num_workers=6,
             max_shots=max_n_shots,
             max_errors=max_n_errors,
             decoders=decoders,
             custom_decoders={
                 "beliefmatching": BeliefMatchingSinterDecoder(
                     max_bp_iters=bp_max_iter,
-                    filename="bp_iters_d8" + code_name + ".csv",
+                    filename="bposd_order200_iters_d8" + code_name + ".csv",
                     metadata={"bias": bias, "per": per, "code_name": code_name},
                 ),
                 "bposd": BeliefMatchingSinterDecoder(
                     bposd=True,
-                    filename="bp_iters_d8" + code_name + ".csv",
+                    filename="bposd_iters_order200_d8" + code_name + ".csv",
                     metadata={"bias": bias, "per": per, "code_name": code_name},
                 ),
-                "maxsat": MaxSATSinterDecoder("normalized-log"),
+#                "maxsat": MaxSATSinterDecoder("normalized-log"),
             },
             print_progress=True,
-            save_resume_filepath=f"./resume_20_9_bp/data_{code_name}.csv",
+            save_resume_filepath=f"./resume_25_9_bposd_order200/data_{code_name}.csv",
         )
 
 
@@ -374,12 +373,19 @@ def load_or_create_stim_circuit(m, q, syndrome_extractor, code, layers, gauge=0)
 
 if __name__ == "__main__":
     distances = [8]
-    max_n_shots = 100_000
+    max_n_shots = 10_000
     max_n_errors = 100
 
     pers = [
-        [0.004],
-        [0.005]
+        [0.006],
+        [0.007],
+        [0.008],
+        [0.009],
+        [0.01],
+        [0.011],
+        [0.012],
+        [0.013],
+        [0.014],
     ]
     for bp_iters in [
         20,
@@ -388,18 +394,25 @@ if __name__ == "__main__":
             main(
                 "FloquetColourCode",
                 ps,
-                [9999],
+                [0.5],
                 "depolarizing_vs_y",
                 distances,
                 max_n_shots,
                 max_n_errors,
-                ["beliefmatching"],
+                ["bposd"],
                 bp_iters,
             )
-
+    """
     pers = [
-        [0.004],
-        [0.005],
+        [0.006],
+        [0.007],
+        [0.008],
+        [0.009],
+        [0.01],
+        [0.011],
+        [0.012],
+        [0.013],
+        [0.014],
     ]
     for bp_iters in [
         20,
@@ -408,15 +421,14 @@ if __name__ == "__main__":
             main(
                 "HoneycombCode",
                 ps,
-                [9999],
+                [0.5],
                 "depolarizing_vs_y",
                 distances,
                 max_n_shots,
                 max_n_errors,
-                ["beliefmatching"],
+                ["bposd"],
                 bp_iters,
             )
-    """
     bias_ps_dict = {(0, 0.25, 0.5): np.linspace(0.003, 0.007, 10), (2,): np.linspace(0.005, 0.01, 10), (8,): np.linsace(
         0.008, 0.016, 10), (32,): np.linspace(0.014, 0.024, 10), (128,): np.linspace(0.018, 0.025, 10), (9999,): np.linspace(0.02, 0.03, 10)}
     for biasess, ps in bias_ps_dict.items():
