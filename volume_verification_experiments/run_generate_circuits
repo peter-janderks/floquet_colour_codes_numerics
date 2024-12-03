@@ -1,0 +1,29 @@
+#!/bin/bash 
+
+set -e 
+parallel -q --ungroup ./generate_circuits.py \
+    --code_name "GaugeHoneycombCode" \
+    --noise_model {1} \
+    --d_x {2} \
+    --d_z 8 \
+    --h {3} \
+    --gf_0 1 \
+    --gf_1 1 \
+    --gf_2 1 \
+    --logical_observable "memory_x" \
+    ::: "phenomenological" "circuit_level_noise" \
+    ::: 4 8 12 16 20  \
+    ::: 4 8 12 16 20 \
+
+parallel -q --ungroup ./generate_circuits.py \
+    --code_name "GaugeFloquetColourCode" \
+    --noise_model {1} \
+    --d_x {2} \
+    --d_z 8 \
+    --h {3} \
+    --gf_0 1 \
+    --gf_1 1 \
+    --logical_observable "memory_x" \
+    ::: "phenomenological" "circuit_level_noise" \
+    ::: 4 8 12 16 20 \
+    ::: 4 8 12 16 20 \
