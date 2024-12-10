@@ -8,6 +8,6 @@ sinter collect \
     --metadata_func auto \
     --decoders pymatching \
     --max_shots 100_000_000 \
-    --max_errors 100 \
+    --max_errors 1000 \
     --processes 10 \
 
