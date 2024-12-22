@@ -1,0 +1,36 @@
+#!/bin/bash
+
+set -e
+
+
+# sinter collect \
+#     --circuits out/circuits_0.00025/*SI1000*distance=[48]* \
+#     --save_resume_filepath out/new_d_d_d_experiment_0.00025.csv \
+#     --metadata_func auto \
+#     --custom_decoders_module_function "beliefmatching:decoder_dict" \
+#     --decoders beliefmatching \
+#     --max_shots 100_000 \
+#     --max_errors 10 \
+#     --processes 10 \
+
+sinter collect \
+    --circuits out/circuits_0.0005/*standard_depolarizing_noise*distance=[48]* \
+    --save_resume_filepath out/new_d_d_d_experiment_0.0005.csv \
+    --metadata_func auto \
+    --custom_decoders_module_function "beliefmatching:decoder_dict" \
+    --decoders beliefmatching \
+    --max_shots 10_000_000 \
+    --max_errors 1 \
+    --processes 10 \
+
+# sinter collect \
+#     --circuits out/circuits_0.00025/* \
+#     --save_resume_filepath out/new_d_d_d_experiment_0.00025.csv \
+#     --metadata_func auto \
+#     --decoders pymatching \
+#     --max_shots 100_000 \
+#     --max_errors 10 \
+#     --processes 10 \
+  
+
+

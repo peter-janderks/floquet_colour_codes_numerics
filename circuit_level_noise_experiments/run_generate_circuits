@@ -1,0 +1,37 @@
+#!/bin/bash
+
+set -e 
+
+parallel -q --ungroup ./generate_circuits.py \
+    --code_name {1} \
+    --per 0.00025 \
+    --noise_model  "standard_depolarizing_noise" \
+    --distance {2} \
+    --gf_1 {3} \
+    --gf_2 {4} \
+    --gf_3 {5} \
+    --logical_observable {6} \
+    --out_dir "out/circuits_0.00025" \
+    ::: "GaugeFloquetColourCode" \
+    ::: 4 8 12\
+    ::: 1 2 3\
+    ::: 1 2 3\
+    ::: 0 \
+    ::: "memory_x" "memory_z" "stability_x" "stability_z" \
+
+parallel -q --ungroup ./generate_circuits.py \
+    --code_name {1} \
+    --per 0.00025 \
+    --noise_model "SI1000" \
+    --distance {2} \
+    --gf_1 {3} \
+    --gf_2 {4} \
+    --gf_3 {5} \
+    --logical_observable {6} \
+    --out_dir "out/circuits_0.00025" \
+    ::: "GaugeHoneycombCode" \
+    ::: 4 8 12 \
+    ::: 1 2 3\
+    ::: 1 2 3\
+    ::: 1 2 3 \
+    ::: "memory_x" "memory_z" "stability_x" "stability_z" \
