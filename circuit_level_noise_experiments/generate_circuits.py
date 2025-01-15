@@ -1,31 +1,23 @@
 #!/usr/bin/env python3
 
 import argparse
-import hashlib
-import math
-from collections import defaultdict
-from datetime import datetime
-from pathlib import Path
 from typing import Callable
 import numpy as np
-import stim
 from scipy.optimize import curve_fit
 import itertools
-import sinter
-from matplotlib import pyplot as plt
+
 
 from main.codes.tic_tac_toe.gauge.GaugeHoneycombCode import GaugeHoneycombCode
 from main.codes.tic_tac_toe.gauge.GaugeFloquetColourCode import GaugeFloquetColourCode
 from main.codes.tic_tac_toe.gauge.GaugeTicTacToeCode import GaugeTicTacToeCode
 from main.codes.tic_tac_toe.TicTacToeCode import TicTacToeCode
-from main.compiling.compilers.AncillaPerCheckCompiler import AncillaPerCheckCompiler
+from main.compiling.compilers import AncillaPerCheckCompiler, NativePauliProductMeasurementsCompiler
 from main.compiling.noise.models import (
-    PhenomenologicalNoise, SI1000, StandardDepolarizingNoise
+    EM3, SI1000, StandardDepolarizingNoise
 
 )
-from main.compiling.noise.noises import OneQubitNoise
-from main.compiling.syndrome_extraction.extractors.ancilla_per_check.mixed.CxCyCzExtractor import (
-    CxCyCzExtractor,
+from main.compiling.syndrome_extraction.extractors import (
+    CxCyCzExtractor, NativePauliProductMeasurementsExtractor
 )
 from main.building_blocks.detectors.Stabilizer import Stabilizer
 import pathlib
@@ -84,7 +76,12 @@ class ConstructCircuits():
         error_distance = len(stim_circuit.detector_error_model(
             approximate_disjoint_errors=True).shortest_graphlike_error())
 
-        if error_distance < distance:
+        if self.noise_model == "EM3":
+            target_distance = distance/2
+        else:
+            target_distance = distance
+
+        if error_distance < target_distance:
             raise ValueError(f"""Error in constructing circuit, the distance of the shortest graphlike error is
                              {error_distance} but it should have been {distance}. The circuit you tried to construct has metadata: {self.metadata}""")
         else:
@@ -94,15 +91,12 @@ class ConstructCircuits():
 
     def init_compiler_settings(self):
 
-        code_name_to_constructor = {
-            "GaugeHoneycombCode": GaugeHoneycombCode,
-            "GaugeFloquetColourCode": GaugeFloquetColourCode,
-        }
-        self.constructor: Callable[[int],
-                                   TicTacToeCode] = code_name_to_constructor[self.code_name]
-
-        self.code: GaugeTicTacToeCode = self.constructor(
-            self.distance, [self.gf_0, self.gf_1, self.gf_2])
+        if code_name == "GaugeHoneycombCode":
+            self.code = GaugeHoneycombCode(self.distance, [
+                self.gf_0, self.gf_1, self.gf_2])
+        elif code_name == "GaugeFloquetColourCode":
+            self.code = GaugeFloquetColourCode(self.distance, [
+                self.gf_0, self.gf_1])
 
         if self.logical_observable == "memory_x" or self.logical_observable == "memory_z":
             self.rounds, d_x, d_z = self.code.get_number_of_rounds_for_timelike_distance(
@@ -118,8 +112,10 @@ class ConstructCircuits():
             self.rounds = self.code.get_number_of_rounds_for_single_timelike_distance(
                 self.distance, 'Z', graphlike=True, noise_model="circuit_level_noise")
             self.init_compiler_settings_stability()
-
-        self.syndrome_extractor = CxCyCzExtractor()
+        if self.noise_model == "EM3":
+            self.syndrome_extractor = NativePauliProductMeasurementsExtractor()
+        else:
+            self.syndrome_extractor = CxCyCzExtractor()
 
     def init_compiler_settings_memory_experiment(self):
 
@@ -171,12 +167,14 @@ class ConstructCircuits():
             noise_model = StandardDepolarizingNoise(self.per)
         elif self.noise_model == "SI1000":
             noise_model = SI1000(self.per)
-        else:
-            raise ValueError(
-                f"noise_model {noise_model} not recognized")
 
-        compiler = AncillaPerCheckCompiler(
-            noise_model, self.syndrome_extractor)
+        if self.noise_model == "EM3":
+            noise_model = EM3(self.per)
+            compiler = NativePauliProductMeasurementsCompiler(
+                noise_model, self.syndrome_extractor)
+        else:
+            compiler = AncillaPerCheckCompiler(
+                noise_model, self.syndrome_extractor)
 
         stim_circuit = compiler.compile_to_stim(
             self.code,

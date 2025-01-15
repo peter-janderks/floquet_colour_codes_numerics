@@ -4,14 +4,14 @@ set -e
 
 parallel -q --ungroup ./generate_circuits.py \
     --code_name {1} \
-    --per 0.00025 \
-    --noise_model  "standard_depolarizing_noise" \
+    --per 0.005 \
+    --noise_model  "EM3" \
     --distance {2} \
     --gf_1 {3} \
     --gf_2 {4} \
     --gf_3 {5} \
     --logical_observable {6} \
-    --out_dir "out/circuits_0.00025" \
+    --out_dir "out/circuits_0.005" \
     ::: "GaugeFloquetColourCode" \
     ::: 4 8 12\
     ::: 1 2 3\
@@ -21,14 +21,14 @@ parallel -q --ungroup ./generate_circuits.py \
 
 parallel -q --ungroup ./generate_circuits.py \
     --code_name {1} \
-    --per 0.00025 \
-    --noise_model "SI1000" \
+    --per 0.005 \
+    --noise_model "EM3" \
     --distance {2} \
     --gf_1 {3} \
     --gf_2 {4} \
     --gf_3 {5} \
     --logical_observable {6} \
-    --out_dir "out/circuits_0.00025" \
+    --out_dir "out/circuits_0.005" \
     ::: "GaugeHoneycombCode" \
     ::: 4 8 12 \
     ::: 1 2 3\
