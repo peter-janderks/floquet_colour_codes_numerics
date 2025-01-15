@@ -1,5 +1,10 @@
 # floquet_colour_codes_numerics
 
-Figure 10 in the paper [is zoomed in version of the second plot in this notebook](https://github.com/peter-janderks/floquet_colour_codes_numerics/blob/main/phenomenological_noise_experiments/bp_experiment.ipynb)
+Figures 1, 2, and 11 are made [in this notebook](https://github.com/peter-janderks/floquet_colour_codes_numerics/blob/main/heatmap/heatmap_plot.ipynb) 
 
-The other figures are made in [this](https://github.com/peter-janderks/floquet_colour_codes_numerics/blob/main/phenomenological_noise_experiments/plot_results_phenomenological_noise.ipynb) notebook
+Figures 3 and 4 are made [in this notebook](https://github.com/peter-janderks/floquet_colour_codes_numerics/blob/main/circuit_level_noise_experiments/circuit_level_noise_experiments.ipynb)
+
+
+Figure 19 is made [in this notebook](https://github.com/peter-janderks/floquet_colour_codes_numerics/blob/main/timelike_distance/timelike_distance_plot.ipynb)
+
+Figure 21 is made [in this notebook](https://github.com/peter-janderks/floquet_colour_codes_numerics/blob/main/volume_verification_plot.ipynb)
