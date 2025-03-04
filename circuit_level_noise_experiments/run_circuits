@@ -2,45 +2,116 @@
 
 set -e
 
+### pymatching 
+# sinter collect \
+#     --circuits new_out/circuits_SD/*\
+#     --save_resume_filepath new_out/data/SD.csv \
+#     --metadata_func auto \
+#     --custom_decoders_module_function "beliefmatching:decoder_dict" \
+#     --decoders pymatching \
+#     --max_shots 1_000_000 \
+#     --max_errors 100 \
+#     --processes 10 \
 
 # sinter collect \
-#     --circuits out/circuits_0.00025/*SI1000*distance=[48]* \
-#     --save_resume_filepath out/new_d_d_d_experiment_0.00025.csv \
+#     --circuits new_out/circuits_SI1000/*\
+#     --save_resume_filepath new_out/data/SI1000.csv \
+#     --metadata_func auto \
+#     --custom_decoders_module_function "beliefmatching:decoder_dict" \
+#     --decoders pymatching \
+#     --max_shots 1_000_000 \
+#     --max_errors 100 \
+#     --processes 10 \
+
+# sinter collect \
+#     --circuits new_out/circuits_EM3_0.005/* \
+#     --save_resume_filepath new_out/data/EM3_0.005.csv \
+#     --metadata_func auto \
+#     --custom_decoders_module_function "beliefmatching:decoder_dict" \
+#     --decoders pymatching \
+#     --max_shots 1_000_000 \
+#     --max_errors 100 \
+#     --processes 10 \
+
+# ### beliefmatching 
+# sinter collect \
+#     --circuits new_out/circuits_SD/*{distance=4,distance=8,distance=12}*\
+#     --save_resume_filepath new_out/data/SD.csv \
+#     --metadata_func auto \
+#     --custom_decoders_module_function "beliefmatching:decoder_dict" \
+#     --decoders beliefmatching \
+#     --max_shots 10_000 \
+#     --max_errors 10 \
+#     --processes 10 \
+
+sinter collect \
+    --circuits new_out/circuits_SI1000/*{distance=4,distance=8,distance=12}*gf_0=3,gf_1=2,gf_2=0* \
+    --save_resume_filepath out/data/si_0.0005.csv \
+    --metadata_func auto \
+    --custom_decoders_module_function "beliefmatching:decoder_dict" \
+    --decoders beliefmatching \
+    --max_shots 100_000 \
+    --max_errors 1000 \
+    --processes 10 \
+
+# sinter collect \
+#     --circuits new_out/circuits_EM3_0.0025/*{distance=4,distance=6,distance=8},gf_0=1,gf_1=1,gf_2=0,logical_observable=*\
+#     --save_resume_filepath new_out/data/EM3_0.0025.csv \
+#     --metadata_func auto \
+#     --custom_decoders_module_function "beliefmatching:decoder_dict" \
+#     --decoders beliefmatching \
+#     --max_shots 100_000 \
+#     --max_errors 100 \
+#     --processes 10 \
+
+
+### beliefmatching 
+# sinter collect \
+#     --circuits new_out/circuits_SD/*distance=16*\
+#     --save_resume_filepath new_out/data/SD.csv \
+#     --metadata_func auto \
+#     --custom_decoders_module_function "beliefmatching:decoder_dict" \
+#     --decoders beliefmatching \
+#     --max_shots 1_000 \
+#     --max_errors 10 \
+#     --processes 10 \
+
+# sinter collect \
+#     --circuits new_out/circuits_SI1000/*distance=16*\
+#     --save_resume_filepath new_out/data/SI1000.csv \
+#     --metadata_func auto \
+#     --custom_decoders_module_function "beliefmatching:decoder_dict" \
+#     --decoders beliefmatching \
+#     --max_shots 1_000 \
+#     --max_errors 10 \
+#     --processes 10 \
+
+# sinter collect \
+#     --circuits new_out/circuits_EM3_0.0025/*distance=8*\
+#     --save_resume_filepath new_out/data/EM3_0.0025.csv \
+#     --metadata_func auto \
+#     --custom_decoders_module_function "beliefmatching:decoder_dict" \
+#     --decoders beliefmatching \
+#     --max_shots 10_000 \
+#     --max_errors 10 \
+#     --processes 10 \
+
+# sinter collect \
+#     --circuits new_out/circuits_EM3_0.005/*{distance=2,distance=4,distance=6}* \
+#     --save_resume_filepath new_out/data/EM3_0.005.csv \
+#     --metadata_func auto \
+#     --custom_decoders_module_function "beliefmatching:decoder_dict" \
+#     --decoders beliefmatching \
+#     --max_shots 100_000 \
+#     --max_errors 100 \
+#     --processes 10 \
+
+# sinter collect \
+#     --circuits new_out/circuits_EM3_0.005/*distance=8* \
+#     --save_resume_filepath new_out/data/EM3_0.005.csv \
 #     --metadata_func auto \
 #     --custom_decoders_module_function "beliefmatching:decoder_dict" \
 #     --decoders beliefmatching \
 #     --max_shots 100_000 \
 #     --max_errors 10 \
 #     --processes 10 \
-
-sinter collect \
-    --circuits out/circuits_0.005/*\
-    --save_resume_filepath out/d_d_d_experiment_0.005.csv \
-    --metadata_func auto \
-    --decoders pymatching \
-    --max_shots 1_000_000 \
-    --max_errors 100 \
-    --processes 10 \
-
-
-sinter collect \
-    --circuits out/circuits_0.005/*distance=[48]*\
-    --save_resume_filepath out/d_d_d_experiment_0.005.csv \
-    --metadata_func auto \
-    --custom_decoders_module_function "beliefmatching:decoder_dict" \
-    --decoders beliefmatching \
-    --max_shots 100_000 \
-    --max_errors 10 \
-    --processes 10 \
-
-# sinter collect \
-#     --circuits out/circuits_0.00025/* \
-#     --save_resume_filepath out/new_d_d_d_experiment_0.00025.csv \
-#     --metadata_func auto \
-#     --decoders pymatching \
-#     --max_shots 100_000 \
-#     --max_errors 10 \
-#     --processes 10 \
-  
-
-

@@ -63,27 +63,24 @@ class ConstructCircuits():
             "logical_observable": logical_observable,
             "n_rounds": self.rounds
         }
+
         meta_str = ','.join(f'{k}={v}' for k, v in self.metadata.items())
 
-        circuit_path = out_dir / f'{meta_str}.stim'
+        circuit_path = out_dir + f'_{per}' / f'{meta_str}.stim'
 
         if circuit_path.exists():
             # the circuit already exists, no need to generate it again
             return
-
+        print(self.metadata)
         stim_circuit = self.construct_circuit()
 
         error_distance = len(stim_circuit.detector_error_model(
             approximate_disjoint_errors=True).shortest_graphlike_error())
 
-        if self.noise_model == "EM3":
-            target_distance = distance/2
-        else:
-            target_distance = distance
-
-        if error_distance < target_distance:
+        target_distance = distance
+        if int(error_distance) != int(target_distance):
             raise ValueError(f"""Error in constructing circuit, the distance of the shortest graphlike error is
-                             {error_distance} but it should have been {distance}. The circuit you tried to construct has metadata: {self.metadata}""")
+                             {error_distance} but it should have been {target_distance}. The circuit you tried to construct has metadata: {self.metadata}""")
         else:
             with open(circuit_path, 'w') as f:
                 f.write(str(stim_circuit
@@ -91,31 +88,39 @@ class ConstructCircuits():
 
     def init_compiler_settings(self):
 
-        if code_name == "GaugeHoneycombCode":
-            self.code = GaugeHoneycombCode(self.distance, [
+        if self.noise_model == "EM3":
+            nm_rounds = "EM3"
+            self.syndrome_extractor = NativePauliProductMeasurementsExtractor()
+
+            # because for the EM3 noise model, the distance is half the width of the patch
+            distance_factor = 2
+
+        else:
+            nm_rounds = "circuit_level_noise"
+            self.syndrome_extractor = CxCyCzExtractor()
+            distance_factor = 1
+
+        if self.code_name == "GaugeHoneycombCode":
+            self.code = GaugeHoneycombCode(self.distance*distance_factor, [
                 self.gf_0, self.gf_1, self.gf_2])
-        elif code_name == "GaugeFloquetColourCode":
-            self.code = GaugeFloquetColourCode(self.distance, [
+        elif self.code_name == "GaugeFloquetColourCode":
+            self.code = GaugeFloquetColourCode(self.distance*distance_factor, [
                 self.gf_0, self.gf_1])
 
         if self.logical_observable == "memory_x" or self.logical_observable == "memory_z":
             self.rounds, d_x, d_z = self.code.get_number_of_rounds_for_timelike_distance(
-                self.distance, graphlike=True, noise_model="circuit_level_noise")
+                self.distance, graphlike=True, noise_model=nm_rounds)
             assert d_x == self.distance or d_z == self.distance
             self.init_compiler_settings_memory_experiment()
 
         elif self.logical_observable == "stability_x":
             self.rounds = self.code.get_number_of_rounds_for_single_timelike_distance(
-                self.distance, 'X', graphlike=True, noise_model="circuit_level_noise")
+                self.distance, 'X', graphlike=True, noise_model=nm_rounds)
             self.init_compiler_settings_stability()
         elif self.logical_observable == "stability_z":
             self.rounds = self.code.get_number_of_rounds_for_single_timelike_distance(
-                self.distance, 'Z', graphlike=True, noise_model="circuit_level_noise")
+                self.distance, 'Z', graphlike=True, noise_model=nm_rounds)
             self.init_compiler_settings_stability()
-        if self.noise_model == "EM3":
-            self.syndrome_extractor = NativePauliProductMeasurementsExtractor()
-        else:
-            self.syndrome_extractor = CxCyCzExtractor()
 
     def init_compiler_settings_memory_experiment(self):
 

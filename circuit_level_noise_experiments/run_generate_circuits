@@ -4,16 +4,17 @@ set -e
 
 parallel -q --ungroup ./generate_circuits.py \
     --code_name {1} \
-    --per 0.005 \
+    --per {2} \
     --noise_model  "EM3" \
-    --distance {2} \
-    --gf_1 {3} \
-    --gf_2 {4} \
-    --gf_3 {5} \
-    --logical_observable {6} \
-    --out_dir "out/circuits_0.005" \
+    --distance {3} \
+    --gf_1 {4} \
+    --gf_2 {5} \
+    --gf_3 {6} \
+    --logical_observable {7} \
+    --out_dir "out/circuits_em3" \
     ::: "GaugeFloquetColourCode" \
-    ::: 4 8 12\
+    ::: 0.005 0.0025 \
+    ::: 2 4 6 8 \
     ::: 1 2 3\
     ::: 1 2 3\
     ::: 0 \
@@ -21,16 +22,89 @@ parallel -q --ungroup ./generate_circuits.py \
 
 parallel -q --ungroup ./generate_circuits.py \
     --code_name {1} \
-    --per 0.005 \
-    --noise_model "EM3" \
-    --distance {2} \
-    --gf_1 {3} \
-    --gf_2 {4} \
-    --gf_3 {5} \
-    --logical_observable {6} \
-    --out_dir "out/circuits_0.005" \
+    --per {2} \
+    --noise_model  "EM3" \
+    --distance {3} \
+    --gf_1 {4} \
+    --gf_2 {5} \
+    --gf_3 {6} \
+    --logical_observable {7} \
+    --out_dir "out/circuits_em3" \
     ::: "GaugeHoneycombCode" \
-    ::: 4 8 12 \
+    ::: 0.005 0.0025 \
+    ::: 2 4 6 8 \
+    ::: 1 2 3\
+    ::: 1 2 3\
+    ::: 1 2 3 \
+    ::: "memory_x" "memory_z" "stability_x" "stability_z" \
+
+parallel -q --ungroup ./generate_circuits.py \
+    --code_name {1} \
+    --per {2} \
+    --noise_model  "standard_depolarizing_noise" \
+    --distance {3} \
+    --gf_1 {4} \
+    --gf_2 {5} \
+    --gf_3 {6} \
+    --logical_observable {7} \
+    --out_dir "out/circuits_sdn" \
+    ::: "GaugeFloquetColourCode" \
+    ::: 0.001 0.0005 \
+    ::: 4 8 12 16\
+    ::: 1 2 3\
+    ::: 1 2 3\
+    ::: 0 \
+    ::: "memory_x" "memory_z" "stability_x" "stability_z" \
+
+parallel -q --ungroup ./generate_circuits.py \
+    --code_name {1} \
+    --per {2} \
+    --noise_model  "standard_depolarizing_noise"  \
+    --distance {3} \
+    --gf_1 {4} \
+    --gf_2 {5} \
+    --gf_3 {6} \
+    --logical_observable {7} \
+    --out_dir "out/circuits_sdn" \
+    ::: "GaugeHoneycombCode" \
+    ::: 0.001 0.0005 \
+    ::: 4 8 12 16 \
+    ::: 1 2 3\
+    ::: 1 2 3\
+    ::: 1 2 3\
+    ::: "memory_x" "memory_z" "stability_x" "stability_z" \
+
+parallel -q --ungroup ./generate_circuits.py \
+    --code_name {1} \
+    --per {2} \
+    --noise_model "SI1000" \
+    --distance {3} \
+    --gf_1 {4} \
+    --gf_2 {5} \
+    --gf_3 {6} \
+    --logical_observable {7} \
+    --out_dir "out/circuits_si" \
+    ::: "GaugeFloquetColourCode" \
+    ::: 0.00025 0.0005 \
+    ::: 4 8 12 16 \
+    ::: 1 2 3\
+    ::: 1 2 3\
+    ::: 0 \
+    ::: "memory_x" "memory_z" "stability_x" "stability_z" \
+
+parallel -q --ungroup ./generate_circuits.py \
+    --code_name {1} \
+    --per {2} \
+    --noise_model "SI1000" \
+    --distance {3} \
+    --gf_1 {4} \
+    --gf_2 {5} \
+    --gf_3 {6} \
+    --logical_observable {6} \
+    --out_dir "out/circuits_si" \
+    ::: "GaugeHoneycombCode" \
+    ::: 0.00025 0.0005 \
+    ::: 4 8 12 16 \
     ::: 1 2 3\
     ::: 1 2 3\
     ::: 1 2 3 \
