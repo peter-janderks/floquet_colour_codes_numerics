@@ -1,0 +1,89 @@
+#!/bin/bash 
+
+set -e 
+
+parallel -q --ungroup ./generate_circuits.py \
+    --code_name {1} \
+    --per 0.001 \
+    --px 1\
+    --py 1\
+    --pz {2}\
+    --pm {3}\
+    --distance {4} \
+    --gf_1 {5} \
+    --gf_2 {6} \
+    --gf_3 {7} \
+    --logical_observable {8} \
+    --out_dir "out/stability_circuits" \
+    ::: "GaugeHoneycombCode" \
+    ::: 1 4 8 16\
+    ::: 1 4 8 16\
+    ::: 4 8 12 16 \
+    ::: 1 2 3 \
+    ::: 1 2 3 \
+    ::: 1 2 3 \
+    ::: "stability_x" "stability_z" \
+
+parallel -q --ungroup ./generate_circuits.py \
+    --code_name {1} \
+    --per 0.001 \
+    --px 1\
+    --py 1\
+    --pz {2}\
+    --pm {3}\
+    --distance {4} \
+    --gf_1 {5} \
+    --gf_2 {6} \
+    --gf_3 {7} \
+    --logical_observable {8} \
+    --out_dir "out/memory_circuits" \
+    ::: "GaugeHoneycombCode" \
+    ::: 1 4 8 16\
+    ::: 1 4 8 16\
+    ::: 4 8 12 16 \
+    ::: 1 2 3 \
+    ::: 1 2 3 \
+    ::: 1 2 3 \
+    ::: "memory_x" "memory_z" \
+
+
+parallel -q --ungroup ./generate_circuits.py \
+    --code_name {1} \
+    --per 0.001 \
+    --px 1\
+    --py 1\
+    --pz {2}\
+    --pm {3}\
+    --distance {4} \
+    --gf_1 {5} \
+    --gf_2 {6} \
+    --logical_observable {7} \
+    --out_dir "out/stability_circuits" \
+    ::: "GaugeFloquetColourCode" \
+    ::: 1 4 8 16 \
+    ::: 1 4 8 16 \
+    ::: 4 8 12 16 \
+    ::: 1 2 3 \
+    ::: 1 2 3 \
+    ::: "stability_x" "stability_z" \
+
+
+parallel -q --ungroup ./generate_circuits.py \
+    --code_name {1} \
+    --per 0.001 \
+    --px 1\
+    --py 1\
+    --pz {2}\
+    --pm {3}\
+    --distance {4} \
+    --gf_1 {5} \
+    --gf_2 {6} \
+    --logical_observable {7} \
+    --out_dir "out/memory_circuits" \
+    ::: "GaugeFloquetColourCode" \
+    ::: 1 4 8 16 \
+    ::: 1 4 8 16 \
+    ::: 4 8 12 16 \
+    ::: 1 2 3 \
+    ::: 1 2 3 \
+    ::: "memory_x" "memory_z" \

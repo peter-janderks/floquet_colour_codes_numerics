@@ -1,0 +1,44 @@
+#!/bin/bash
+
+set -e
+
+sinter collect \
+    --circuits out/memory_circuits/*{distance=4,distance=8,distance=12}* \
+    --save_resume_filepath out/data/memory_0.001.csv \
+    --metadata_func auto \
+    --custom_decoders_module_function "beliefmatching:decoder_dict" \
+    --decoders beliefmatching \
+    --max_shots 100_000 \
+    --max_errors 100 \
+    --processes 10 \
+
+
+sinter collect \
+    --circuits out/stability_circuits/*{distance=4,distance=8,distance=12}* \
+    --save_resume_filepath out/data/stability_0.001.csv \
+    --metadata_func auto \
+    --custom_decoders_module_function "beliefmatching:decoder_dict" \
+    --decoders beliefmatching \
+    --max_shots 100_000 \
+    --max_errors 100 \
+    --processes 10 \
+
+sinter collect \
+    --circuits out/memory_circuits/* \
+    --save_resume_filepath out/data/memory_0.001.csv \
+    --metadata_func auto \
+    --custom_decoders_module_function "beliefmatching:decoder_dict" \
+    --decoders pymatching \
+    --max_shots 1_000_000 \
+    --max_errors 100 \
+    --processes 10 \
+
+sinter collect \
+    --circuits out/stability_circuits/* \
+    --save_resume_filepath out/data/stability_0.001.csv \
+    --metadata_func auto \
+    --custom_decoders_module_function "beliefmatching:decoder_dict" \
+    --decoders pymatching \
+    --max_shots 1_000_000 \
+    --max_errors 100 \
+    --processes 10 \
