@@ -1,6 +1,8 @@
-# floquet_colour_codes_numerics
+This repository contains the code to generate the circuits,run the circuits and produce the plots in ...
+See the instructions.md file in each directory.
 
-Figures 1, 2, 17, 24, and 25 are made [in this notebook](https://github.com/peter-janderks/floquet_colour_codes_numerics/blob/main/heatmap/heatmap_plot.ipynb) 
+
+Figures 1, 2, 17, 24, and 25 are made [in this notebook](https://github.com/peter-janderks/floquet_colour_codes_numerics/blob/main/phenomenological_noise/generate_phenomenological_noise_plots.ipynb) 
 
 Figure 15 is made [in this notebook](https://github.com/peter-janderks/floquet_colour_codes_numerics/blob/main/phenomenological_noise/teraquop_linefit_plots.ipynb)
 
