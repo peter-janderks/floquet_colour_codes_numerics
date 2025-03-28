@@ -1,4 +1,4 @@
-This repository contains the code to generate the circuits,run the circuits and produce the plots in ...
+This repository contains the code to generate the circuits,run the circuits and produce the plots in "Improving the spacetime overhead of dynamic stabilizer codes by repeating measurements".
 See the instructions.md file in each directory.
 
 
